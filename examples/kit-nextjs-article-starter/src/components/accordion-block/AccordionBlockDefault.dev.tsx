@@ -8,7 +8,14 @@ import { NoDataFallback } from '@/utils/NoDataFallback';
 import { StructuredData } from '@/components/structured-data/StructuredData';
 import { generateFAQPageSchema } from '@/lib/structured-data/schema';
 
-const stripHtml = (value: string): string => value.replace(/<[^>]*>/g, '').trim();
+const stripHtml = (value: string): string => {
+  const htmlTagPattern = /<[^>]*>/g;
+  let result = value;
+  while (htmlTagPattern.test(result)) {
+    result = result.replace(htmlTagPattern, '');
+  }
+  return result.trim();
+};
 
 const extractTextFromRichField = (field: AccordionItemProps['description'] | undefined): string => {
   const value: unknown = field?.jsonValue?.value;
