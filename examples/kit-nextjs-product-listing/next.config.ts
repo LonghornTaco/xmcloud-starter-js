@@ -4,6 +4,8 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const nextConfig: NextConfig = {
   // Allow specifying a distinct distDir when concurrently running app in a container
   distDir: process.env.NEXTJS_DIST_DIR || '.next',
+
+  productionBrowserSourceMaps: process.env.GENERATE_SOURCEMAP === 'true',
   
   // Enable React Strict Mode
   reactStrictMode: true,

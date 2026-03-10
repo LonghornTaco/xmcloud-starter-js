@@ -57,7 +57,7 @@ const StatBox = (props: StatBoxProps): JSX.Element => {
           <h3 className="text-xl font-bold mb-6">
             <ContentSdkText field={props.stat.statHeading?.jsonValue} />
           </h3>
-          <p className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`} role="text" aria-label="Statistic value">
+          <p className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`} aria-label="Statistic value">
             <ContentSdkText field={props.stat.statValue?.jsonValue} />
           </p>
           <p>
@@ -75,7 +75,6 @@ const StatBox = (props: StatBoxProps): JSX.Element => {
             className={`${
               props.isSmall ? 'text-6xl' : 'text-7xl'
             } font-bold pb-4 mb-4 text-right border-b mt-auto`}
-            role="text"
             aria-label="Statistic value"
           >
             <ContentSdkText field={props.stat.statValue?.jsonValue} />
@@ -91,7 +90,7 @@ const StatBox = (props: StatBoxProps): JSX.Element => {
           <h3 className="text-xl font-bold mt-auto mb-12">
             <ContentSdkText field={props.stat.statHeading?.jsonValue} />
           </h3>
-          <p className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`} role="text" aria-label="Statistic value">
+          <p className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`} aria-label="Statistic value">
             <ContentSdkText field={props.stat.statValue?.jsonValue} />
           </p>
           <p>
@@ -105,7 +104,7 @@ const StatBox = (props: StatBoxProps): JSX.Element => {
           <h3 className="text-xl font-bold mb-6">
             <ContentSdkText field={props.stat.statHeading?.jsonValue} />
           </h3>
-          <p className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`} role="text" aria-label="Statistic value">
+          <p className={`${props.isSmall ? 'text-6xl' : 'text-7xl'} font-bold`} aria-label="Statistic value">
             <ContentSdkText field={props.stat.statValue?.jsonValue} />
           </p>
           <p>
@@ -135,7 +134,7 @@ export const Default = (props: StatsProps): JSX.Element => {
       <div className="container mx-auto">
         <div className="grid md:grid-cols-2 gap-x-20 gap-y-4 mb-20">
           <div>
-            <p className="font-semibold mb-4" role="text">
+            <p className="font-semibold mb-4">
               <ContentSdkText field={datasource.tagLine?.jsonValue} />
             </p>
             <h2 className="text-5xl font-bold">
@@ -175,7 +174,7 @@ export const StatsSection1 = (props: StatsProps): JSX.Element => {
       <div className="relative container mx-auto text-white z-2">
         <div className="grid md:grid-cols-2 gap-x-20 gap-y-4 mb-20">
           <div>
-            <p className="font-semibold mb-4" role="text">
+            <p className="font-semibold mb-4">
               <ContentSdkText field={datasource.tagLine?.jsonValue} />
             </p>
             <h2 className="text-5xl font-bold">
@@ -206,7 +205,7 @@ export const StatsSection2 = (props: StatsProps): JSX.Element => {
     <section className={`py-24 px-4 ${props.params.styles}`} data-class-change>
       <div className="container mx-auto">
         <div className="max-w-3xl">
-          <p className="font-semibold mb-4" role="text">
+          <p className="font-semibold mb-4">
             <ContentSdkText field={datasource.tagLine?.jsonValue} />
           </p>
           <h2 className="text-5xl font-bold mb-6">
@@ -240,7 +239,7 @@ export const StatsSection3 = (props: StatsProps): JSX.Element => {
       <div className="container mx-auto">
         <div className="grid md:grid-cols-2 gap-20 items-start">
           <div>
-            <p className="font-semibold mb-4" role="text">
+            <p className="font-semibold mb-4">
               <ContentSdkText field={datasource.tagLine?.jsonValue} />
             </p>
             <h2 className="text-5xl font-bold mb-6">
@@ -275,7 +274,7 @@ export const StatsSection4 = (props: StatsProps): JSX.Element => {
       <div className="container mx-auto">
         <div className="grid md:grid-cols-5 gap-20 items-start">
           <div className="md:col-span-2">
-            <p className="font-semibold mb-4" role="text">
+            <p className="font-semibold mb-4">
               <ContentSdkText field={datasource.tagLine?.jsonValue} />
             </p>
             <h2 className="text-5xl font-bold mb-6">
@@ -304,7 +303,7 @@ export const StatsSection5 = (props: StatsProps): JSX.Element => {
     <section className={`py-24 px-4 ${props.params.styles}`} data-class-change>
       <div className="container mx-auto">
         <div className="text-center mb-20">
-          <p className="font-semibold mb-4" role="text">
+          <p className="font-semibold mb-4">
             <ContentSdkText field={datasource.tagLine?.jsonValue} />
           </p>
           <h2 className="text-5xl font-bold mb-6">
@@ -342,7 +341,7 @@ export const StatsSection6 = (props: StatsProps): JSX.Element => {
     <section className={`py-24 px-4 ${props.params.styles}`} data-class-change>
       <div className="container mx-auto">
         <div className="max-w-3xl text-center mb-20 mx-auto">
-          <p className="font-semibold mb-4" role="text">
+          <p className="font-semibold mb-4">
             <ContentSdkText field={datasource.tagLine?.jsonValue} />
           </p>
           <h2 className="text-5xl font-bold mb-6">
@@ -388,7 +387,7 @@ export const StatsSection7 = (props: StatsProps): JSX.Element => {
     <section className={`py-24 px-4 ${props.params.styles}`} data-class-change>
       <div className="container mx-auto">
         <div className="max-w-3xl mb-20">
-          <p className="font-semibold mb-4" role="text">
+          <p className="font-semibold mb-4">
             <ContentSdkText field={datasource.tagLine?.jsonValue} />
           </p>
           <h2 className="text-5xl font-bold mb-6">
@@ -427,7 +426,7 @@ export const StatsSection8 = (props: StatsProps): JSX.Element => {
       <div className="container mx-auto">
         <div className="grid md:grid-cols-2 gap-x-20 gap-y-4 mb-20">
           <div>
-            <p className="font-semibold mb-4" role="text">
+            <p className="font-semibold mb-4">
               <ContentSdkText field={datasource.tagLine?.jsonValue} />
             </p>
             <h2 className="text-5xl font-bold">

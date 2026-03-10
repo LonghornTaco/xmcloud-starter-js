@@ -25,6 +25,56 @@ type FooterSTProps = ComponentProps & {
   fields: Fields;
 };
 
+/** Returns true if the link field has a valid href (not a placeholder like # or http://#). */
+function hasValidLink(field: LinkField | undefined): boolean {
+  const href = field?.value?.href;
+  return !!(href && href !== '#' && !href.startsWith('http://#'));
+}
+
+const SocialLinks = ({ fields }: { fields: Fields }) => (
+  <div className="flex justify-center gap-4">
+    {hasValidLink(fields?.FacebookLink) ? (
+      <ContentSdkLink
+        field={fields?.FacebookLink}
+        prefetch={false}
+        aria-label="Facebook"
+      >
+        <FontAwesomeIcon icon={faFacebook} width={20} height={20} />
+      </ContentSdkLink>
+    ) : (
+      <span role="img" aria-label="Facebook">
+        <FontAwesomeIcon icon={faFacebook} width={20} height={20} />
+      </span>
+    )}
+    {hasValidLink(fields?.InstagramLink) ? (
+      <ContentSdkLink
+        field={fields?.InstagramLink}
+        prefetch={false}
+        aria-label="Instagram"
+      >
+        <FontAwesomeIcon icon={faInstagram} width={22} height={22} />
+      </ContentSdkLink>
+    ) : (
+      <span role="img" aria-label="Instagram">
+        <FontAwesomeIcon icon={faInstagram} width={22} height={22} />
+      </span>
+    )}
+    {hasValidLink(fields?.LinkedinLink) ? (
+      <ContentSdkLink
+        field={fields?.LinkedinLink}
+        prefetch={false}
+        aria-label="LinkedIn"
+      >
+        <FontAwesomeIcon icon={faLinkedinIn} width={24} height={24} />
+      </ContentSdkLink>
+    ) : (
+      <span role="img" aria-label="LinkedIn">
+        <FontAwesomeIcon icon={faLinkedinIn} width={24} height={24} />
+      </span>
+    )}
+  </div>
+);
+
 export const Default = (props: FooterSTProps) => {
   return (
     <section
@@ -56,29 +106,7 @@ export const Default = (props: FooterSTProps) => {
       <div className="h-20 lg:h-40 bg-sound-waves bg-contain bg-repeat bg-center my-12 lg:my-16"></div>
       <div className="container mx-auto px-4">
         <div className="flex flex-col gap-4 items-center lg:flex-row lg:justify-between">
-          <div className="flex justify-center gap-4">
-            <ContentSdkLink
-              field={props.fields?.FacebookLink}
-              prefetch={false}
-              aria-label="Facebook"
-            >
-              <FontAwesomeIcon icon={faFacebook} width={20} height={20} />
-            </ContentSdkLink>
-            <ContentSdkLink
-              field={props.fields?.InstagramLink}
-              prefetch={false}
-              aria-label="Instagram"
-            >
-              <FontAwesomeIcon icon={faInstagram} width={22} height={22} />
-            </ContentSdkLink>
-            <ContentSdkLink
-              field={props.fields?.LinkedinLink}
-              prefetch={false}
-              aria-label="LinkedIn"
-            >
-              <FontAwesomeIcon icon={faLinkedinIn} width={24} height={24} />
-            </ContentSdkLink>
-          </div>
+          <SocialLinks fields={props.fields} />
           <div>
             <ContentSdkRichText field={props.fields?.CopyrightText} />
           </div>
@@ -120,29 +148,7 @@ export const LogoLeft = (props: FooterSTProps) => {
           </div>
         </div>
         <div className="flex flex-col gap-4 items-center lg:flex-row lg:justify-between mt-8">
-          <div className="flex justify-center gap-4">
-            <ContentSdkLink
-              field={props.fields?.FacebookLink}
-              prefetch={false}
-              aria-label="Facebook"
-            >
-              <FontAwesomeIcon icon={faFacebook} width={20} height={20} />
-            </ContentSdkLink>
-            <ContentSdkLink
-              field={props.fields?.InstagramLink}
-              prefetch={false}
-              aria-label="Instagram"
-            >
-              <FontAwesomeIcon icon={faInstagram} width={22} height={22} />
-            </ContentSdkLink>
-            <ContentSdkLink
-              field={props.fields?.LinkedinLink}
-              prefetch={false}
-              aria-label="LinkedIn"
-            >
-              <FontAwesomeIcon icon={faLinkedinIn} width={24} height={24} />
-            </ContentSdkLink>
-          </div>
+          <SocialLinks fields={props.fields} />
           <div>
             <ContentSdkRichText field={props.fields?.CopyrightText} />
           </div>
@@ -186,29 +192,7 @@ export const LogoRight = (props: FooterSTProps) => {
           </div>
         </div>
         <div className="flex flex-col gap-4 items-center lg:flex-row lg:justify-between mt-8">
-          <div className="flex justify-center gap-4">
-            <ContentSdkLink
-              field={props.fields?.FacebookLink}
-              prefetch={false}
-              aria-label="Facebook"
-            >
-              <FontAwesomeIcon icon={faFacebook} width={20} height={20} />
-            </ContentSdkLink>
-            <ContentSdkLink
-              field={props.fields?.InstagramLink}
-              prefetch={false}
-              aria-label="Instagram"
-            >
-              <FontAwesomeIcon icon={faInstagram} width={22} height={22} />
-            </ContentSdkLink>
-            <ContentSdkLink
-              field={props.fields?.LinkedinLink}
-              prefetch={false}
-              aria-label="LinkedIn"
-            >
-              <FontAwesomeIcon icon={faLinkedinIn} width={24} height={24} />
-            </ContentSdkLink>
-          </div>
+          <SocialLinks fields={props.fields} />
           <div>
             <ContentSdkRichText field={props.fields?.CopyrightText} />
           </div>
@@ -250,29 +234,7 @@ export const Centered = (props: FooterSTProps) => {
             </div>
           </div>
           <div className="flex flex-col gap-4 items-center lg:items-end lg:self-end mt-8">
-            <div className="flex justify-center gap-4">
-              <ContentSdkLink
-                field={props.fields?.FacebookLink}
-                prefetch={false}
-                aria-label="Facebook"
-              >
-                <FontAwesomeIcon icon={faFacebook} width={20} height={20} />
-              </ContentSdkLink>
-              <ContentSdkLink
-                field={props.fields?.InstagramLink}
-                prefetch={false}
-                aria-label="Instagram"
-              >
-                <FontAwesomeIcon icon={faInstagram} width={22} height={22} />
-              </ContentSdkLink>
-              <ContentSdkLink
-                field={props.fields?.LinkedinLink}
-                prefetch={false}
-                aria-label="LinkedIn"
-              >
-                <FontAwesomeIcon icon={faLinkedinIn} width={24} height={24} />
-              </ContentSdkLink>
-            </div>
+            <SocialLinks fields={props.fields} />
             <div>
               <ContentSdkRichText field={props.fields.CopyrightText} />
             </div>

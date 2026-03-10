@@ -1,6 +1,7 @@
 import {
   NextImage as ContentSdkImage,
   Link as ContentSdkLink,
+  LinkField,
   RichText as ContentSdkRichText,
   Text as ContentSdkText,
 } from '@sitecore-content-sdk/nextjs';
@@ -115,30 +116,57 @@ const TeamMemberImage = (props: TeamMemberImageProps) => {
   }
 };
 
+/** Returns true if the link has a valid href (not a placeholder like # or http://#). */
+function hasValidLink(link: { value?: { href?: string } } | undefined): boolean {
+  const href = link?.value?.href;
+  return !!(href && href !== '#' && !href.startsWith('http://#'));
+}
+
+const SocialIcon = ({
+  field,
+  ariaLabel,
+  icon,
+}: {
+  field: { value?: { href?: string } } | undefined;
+  ariaLabel: string;
+  icon: JSX.Element;
+}) =>
+  hasValidLink(field) && field ? (
+    <ContentSdkLink
+      field={field as LinkField}
+      prefetch={false}
+      aria-label={ariaLabel}
+    >
+      {icon}
+    </ContentSdkLink>
+  ) : (
+    <span role="img" aria-label={ariaLabel}>{icon}</span>
+  );
+
 const TeamMemberCard = (props: TeamMemberCardProps) => {
   const socialLinks = useMemo(
     () => (
       <div className={`flex ${props.centered ? 'justify-center' : ''} gap-4 mt-6`}>
-        <ContentSdkLink field={props.tm.facebook?.jsonValue} prefetch={false} aria-label="Facebook">
-          <FontAwesomeIcon icon={faFacebook} width={20} height={20} />
-        </ContentSdkLink>
-        <ContentSdkLink
+        <SocialIcon
+          field={props.tm.facebook?.jsonValue}
+          ariaLabel="Facebook"
+          icon={<FontAwesomeIcon icon={faFacebook} width={20} height={20} />}
+        />
+        <SocialIcon
           field={props.tm.instagram?.jsonValue}
-          prefetch={false}
-          aria-label="Instagram"
-        >
-          <FontAwesomeIcon icon={faInstagram} width={22} height={22} />
-        </ContentSdkLink>
-        <ContentSdkLink field={props.tm.linkedIn?.jsonValue} prefetch={false} aria-label="LinkedIn">
-          <FontAwesomeIcon icon={faLinkedinIn} width={24} height={24} />
-        </ContentSdkLink>
-        <ContentSdkLink
+          ariaLabel="Instagram"
+          icon={<FontAwesomeIcon icon={faInstagram} width={22} height={22} />}
+        />
+        <SocialIcon
+          field={props.tm.linkedIn?.jsonValue}
+          ariaLabel="LinkedIn"
+          icon={<FontAwesomeIcon icon={faLinkedinIn} width={24} height={24} />}
+        />
+        <SocialIcon
           field={props.tm.twitterX?.jsonValue}
-          prefetch={false}
-          aria-label="X (Twitter)"
-        >
-          <FontAwesomeIcon icon={faXTwitter} width={22} height={22} />
-        </ContentSdkLink>
+          ariaLabel="X (Twitter)"
+          icon={<FontAwesomeIcon icon={faXTwitter} width={22} height={22} />}
+        />
       </div>
     ),
     [
@@ -199,7 +227,7 @@ const TeamSectionTemplateVertical = (props: TeamSectionTemplateVerticalProps) =>
     <section className={`py-24 px-4 ${props.params.styles}`} data-class-change>
       <div className="container mx-auto">
         <div className={`${props.centered ? 'max-w-3xl mx-auto text-center' : ''}`}>
-          <p className="font-semibold mb-4" role="text">
+          <p className="font-semibold mb-4">
             <ContentSdkText field={datasource.tagLine?.jsonValue} />
           </p>
           <h2 className="text-5xl font-bold mb-6">
@@ -244,7 +272,7 @@ const TeamSectionTemplateHorizontal = (props: TeamSectionTemplateHorizontalProps
       <div className="container mx-auto">
         <div className={`grid md:grid-cols-${props.columns + 1} gap-x-16 gap-y-12`}>
           <div>
-            <p className="font-semibold mb-4" role="text">
+            <p className="font-semibold mb-4">
               <ContentSdkText field={datasource.tagLine?.jsonValue} />
             </p>
             <h2 className="text-5xl font-bold mb-6">

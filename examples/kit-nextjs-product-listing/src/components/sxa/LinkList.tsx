@@ -99,7 +99,7 @@ export const Default = (props: LinkListProps): JSX.Element => {
             field={datasource?.field?.title}
             className="text-nowrap mb-5 text-xl font-bold text-gray-600"
           />
-          <ul className="list-none p-0 m-0" role="listbox" aria-label="Navigation options">
+          <ul className="list-none p-0 m-0" aria-label="Navigation options">
             {list}
           </ul>
         </div>
@@ -167,16 +167,17 @@ export const AnchorNav = (props: LinkListProps): JSX.Element => {
         const isActive = targetId === activeId;
 
         return (
-          <a
-            key={`${key}${href}`}
-            href={href}
-            onClick={(e) => handleClick(e, href)}
-            className={`text-sm font-semibold py-4 transition-colors border-b-2 ${
-              isActive ? 'border-black' : 'border-transparent'
-            }`}
-          >
-            {link?.value?.text}
-          </a>
+          <li key={`${key}${href}`} className="list-none">
+            <a
+              href={href}
+              onClick={(e) => handleClick(e, href)}
+              className={`text-sm font-semibold py-4 transition-colors border-b-2 block ${
+                isActive ? 'border-black' : 'border-transparent'
+              }`}
+            >
+              {link?.value?.text}
+            </a>
+          </li>
         );
       });
 
@@ -189,7 +190,6 @@ export const AnchorNav = (props: LinkListProps): JSX.Element => {
         <div className="container mx-auto px-4">
           <ul
             className="flex gap-12 list-none p-0 m-0"
-            role="listbox"
             aria-label="Navigation options"
           >
             {list}
