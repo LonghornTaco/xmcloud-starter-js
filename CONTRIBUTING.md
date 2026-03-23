@@ -16,6 +16,7 @@ This guide will help you get started and ensure a smooth contribution process.
 - [Submitting a Pull Request](#submitting-a-pull-request)
 - [Code Review Process](#code-review-process)
 - [AI-Assisted Development](#-ai-assisted-development)
+  - [Skills: Capability Map](#skills-capability-map)
   - [Claude Code Guide](#claude-code-guide)
   - [Cursor AI Rules](#cursor-ai-rules)
   - [Windsurf IDE Rules](#windsurf-ide-rules)
@@ -157,6 +158,10 @@ Make sure your branch is up-to-date with upstream/main and create your PR agains
 ## 🤖 AI-Assisted Development
 
 This repository includes comprehensive AI coding agent guidance files to help maintain consistent code quality and follow Sitecore XM Cloud best practices across multiple AI assistants.
+
+### Skills: Capability Map
+
+The repository includes **[docs/Skills.md](docs/Skills.md)** – a high-level capability grouping for the starter kits that helps AI tools and developers understand what the starters support and when to use each area.
 
 ### Claude Code Guide
 
