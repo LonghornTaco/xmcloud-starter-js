@@ -43,12 +43,12 @@ jobs:
           CREDENTIALS_OK=true
           
           # Check required secrets
-          if [ -z "${{ secrets.SITECORE_EDGE_URL }}" ]; then
-            echo "❌ SITECORE_EDGE_URL is missing"
-            MISSING_CREDENTIALS="$MISSING_CREDENTIALS SITECORE_EDGE_URL"
+          if [ -z "${{ secrets.NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME }}" ]; then
+            echo "❌ NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME is missing"
+            MISSING_CREDENTIALS="$MISSING_CREDENTIALS NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME"
             CREDENTIALS_OK=false
           else
-            echo "✅ SITECORE_EDGE_URL is set"
+            echo "✅ NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME is set"
           fi
           
           if [ -z "${{ secrets.SITECORE_EDGE_CONTEXT_ID }}" ]; then
@@ -105,7 +105,7 @@ jobs:
             echo "  Settings > Secrets and variables > Actions > Secrets"
             echo ""
             echo "Required secrets:"
-            echo "  - SITECORE_EDGE_URL"
+            echo "  - NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME"
             echo "  - SITECORE_EDGE_CONTEXT_ID"
             echo "  - NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID"
             echo "  - SITECORE_EDITING_SECRET"
@@ -346,7 +346,7 @@ jobs:
         if: steps.credential-check.outputs.credentials-valid == 'true'
         env:
           # Sitecore Edge API Configuration
-          SITECORE_EDGE_URL: ${{ secrets.SITECORE_EDGE_URL }}
+          NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME: ${{ secrets.NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME }}
           SITECORE_EDGE_CONTEXT_ID: ${{ secrets.SITECORE_EDGE_CONTEXT_ID }}
           NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID: ${{ secrets.NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID }}
 
@@ -355,7 +355,6 @@ jobs:
           SITECORE_EDITING_SECRET: ${{ secrets.SITECORE_EDITING_SECRET }}
 
           # Additional Sitecore Environment Variables
-          NEXT_PUBLIC_SITECORE_EDGE_URL: ${{ secrets.SITECORE_EDGE_URL }}
           NEXT_PUBLIC_SITECORE_API_KEY: ${{ secrets.NEXT_PUBLIC_SITECORE_API_KEY }}
           NEXT_PUBLIC_SITECORE_API_HOST: ${{ secrets.NEXT_PUBLIC_SITECORE_API_HOST }}
           NEXT_PUBLIC_DEFAULT_LANGUAGE: ${{ vars.NEXT_PUBLIC_DEFAULT_LANGUAGE || 'en' }}
@@ -368,7 +367,7 @@ jobs:
           echo "=========================================="
           echo ""
           echo "Sitecore Environment Variables Status:"
-          echo "  SITECORE_EDGE_URL: ${SITECORE_EDGE_URL:+✅ [SET]}${SITECORE_EDGE_URL:-❌ [NOT SET]}"
+          echo "  NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME: ${NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME:+✅ [SET]}${NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME:-❌ [NOT SET]}"
           echo "  SITECORE_EDGE_CONTEXT_ID: ${SITECORE_EDGE_CONTEXT_ID:+✅ [SET]}${SITECORE_EDGE_CONTEXT_ID:-❌ [NOT SET]}"
           echo "  NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID: ${NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID:+✅ [SET]}${NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID:-❌ [NOT SET]}"
           echo "  NEXT_PUBLIC_DEFAULT_SITE_NAME: ${NEXT_PUBLIC_DEFAULT_SITE_NAME}"
@@ -520,7 +519,7 @@ jobs:
           echo ""
           echo "  1. Go to: Settings > Secrets and variables > Actions > Secrets"
           echo "  2. Add the following required secrets:"
-          echo "     - SITECORE_EDGE_URL"
+          echo "     - NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME"
           echo "     - SITECORE_EDGE_CONTEXT_ID"
           echo "     - NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID"
           echo "     - SITECORE_EDITING_SECRET"
@@ -570,12 +569,11 @@ jobs:
       - name: Run GEO endpoint tests (with server)
         id: run-geo-tests
         env:
-          SITECORE_EDGE_URL: ${{ secrets.SITECORE_EDGE_URL }}
+          NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME: ${{ secrets.NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME }}
           SITECORE_EDGE_CONTEXT_ID: ${{ secrets.SITECORE_EDGE_CONTEXT_ID }}
           NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID: ${{ secrets.NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID }}
           NEXT_PUBLIC_DEFAULT_SITE_NAME: ${{ vars.NEXT_PUBLIC_DEFAULT_SITE_NAME || 'basic' }}
           SITECORE_EDITING_SECRET: ${{ secrets.SITECORE_EDITING_SECRET }}
-          NEXT_PUBLIC_SITECORE_EDGE_URL: ${{ secrets.SITECORE_EDGE_URL }}
           NEXT_PUBLIC_SITECORE_API_KEY: ${{ secrets.NEXT_PUBLIC_SITECORE_API_KEY }}
           NEXT_PUBLIC_SITECORE_API_HOST: ${{ secrets.NEXT_PUBLIC_SITECORE_API_HOST }}
           NEXT_PUBLIC_DEFAULT_LANGUAGE: ${{ vars.NEXT_PUBLIC_DEFAULT_LANGUAGE || 'en' }}
@@ -731,7 +729,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Solution:** An upstream repository administrator must configure secrets:" >> $GITHUB_STEP_SUMMARY
           echo "1. Go to: Settings > Secrets and variables > Actions > Secrets" >> $GITHUB_STEP_SUMMARY
-          echo "2. Add required secrets: SITECORE_EDGE_URL, SITECORE_EDGE_CONTEXT_ID, NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID, SITECORE_EDITING_SECRET" >> $GITHUB_STEP_SUMMARY
+          echo "2. Add required secrets: NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME, SITECORE_EDGE_CONTEXT_ID, NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID, SITECORE_EDITING_SECRET" >> $GITHUB_STEP_SUMMARY
           echo "3. This is NOT a code issue - it's a repository configuration issue" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Next Steps:**" >> $GITHUB_STEP_SUMMARY

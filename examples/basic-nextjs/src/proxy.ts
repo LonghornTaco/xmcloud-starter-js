@@ -1,16 +1,16 @@
-import { type NextRequest, type NextFetchEvent } from 'next/server';
+import { type NextRequest } from 'next/server';
 import {
-  defineMiddleware,
-  AppRouterMultisiteMiddleware,
-  PersonalizeMiddleware,
-  RedirectsMiddleware,
-  LocaleMiddleware,
-} from '@sitecore-content-sdk/nextjs/middleware';
+  defineProxy,
+  AppRouterMultisiteProxy,
+  PersonalizeProxy,
+  RedirectsProxy,
+  LocaleProxy,
+} from '@sitecore-content-sdk/nextjs/proxy';
 import sites from '.sitecore/sites.json';
 import scConfig from 'sitecore.config';
 import { routing } from './i18n/routing';
 
-const locale = new LocaleMiddleware({
+const locale = new LocaleProxy({
   /**
    * List of sites for site resolver to work with
    */
@@ -26,7 +26,7 @@ const locale = new LocaleMiddleware({
   skip: () => false,
 });
 
-const multisite = new AppRouterMultisiteMiddleware({
+const multisite = new AppRouterMultisiteProxy({
   /**
    * List of sites for site resolver to work with
    */
@@ -39,14 +39,14 @@ const multisite = new AppRouterMultisiteMiddleware({
   skip: () => false,
 });
 
-const redirects = new RedirectsMiddleware({
+const redirects = new RedirectsProxy({
   /**
    * List of sites for site resolver to work with
    */
   sites,
   ...scConfig.api.edge,
-  ...scConfig.redirects,
   ...scConfig.api.local,
+  ...scConfig.redirects,
   // This function determines if the middleware should be turned off on per-request basis.
   // Certain paths are ignored by default (e.g. Next.js API routes), but you may wish to disable more.
   // By default it is disabled while in development mode.
@@ -54,7 +54,7 @@ const redirects = new RedirectsMiddleware({
   skip: () => false,
 });
 
-const personalize = new PersonalizeMiddleware({
+const personalize = new PersonalizeProxy({
   /**
    * List of sites for site resolver to work with
    */
@@ -68,8 +68,8 @@ const personalize = new PersonalizeMiddleware({
   skip: () => false,
 });
 
-export function middleware(req: NextRequest, ev: NextFetchEvent) {
-  return defineMiddleware(locale, multisite, redirects, personalize).exec(req, ev);
+export default function proxy(req: NextRequest) {
+  return defineProxy(locale, multisite, redirects, personalize).exec(req);
 }
 
 export const config = {

@@ -5,6 +5,7 @@ import { Form } from '@sitecore-content-sdk/nextjs';
 
 // end of built-in components
 import * as Title from 'src/components/title/Title';
+import * as StructuredData from 'src/components/structured-data/StructuredData';
 import * as RowSplitter from 'src/components/row-splitter/RowSplitter';
 import * as RichText from 'src/components/rich-text/RichText';
 import * as Promo from 'src/components/promo/Promo';
@@ -20,8 +21,9 @@ import * as ColumnSplitter from 'src/components/column-splitter/ColumnSplitter';
 export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BYOCWrapper', BYOCServerWrapper],
   ['FEaaSWrapper', FEaaSServerWrapper],
-  ['Form', Form],
+  ['Form', { ...Form, componentType: 'client' }],
   ['Title', { ...Title }],
+  ['StructuredData', { ...StructuredData }],
   ['RowSplitter', { ...RowSplitter }],
   ['RichText', { ...RichText }],
   ['Promo', { ...Promo }],
@@ -30,7 +32,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['Navigation', { ...Navigation, componentType: 'client' }],
   ['LinkList', { ...LinkList }],
   ['Image', { ...Image }],
-  ['ContentBlock', { ...ContentBlock }],
+  ['ContentBlock', { ...ContentBlock, componentType: 'client' }],
   ['Container', { ...Container }],
   ['ColumnSplitter', { ...ColumnSplitter }],
 ]);

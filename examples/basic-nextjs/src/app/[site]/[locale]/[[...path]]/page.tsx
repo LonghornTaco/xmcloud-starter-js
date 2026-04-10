@@ -11,10 +11,7 @@ import components from ".sitecore/component-map";
 import Providers from "src/Providers";
 import { NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-
-// Configure dynamic rendering to avoid SSR issues with client-side hooks
-// This ensures all pages are rendered on-demand rather than pre-rendered at build time
-export const dynamic = 'force-dynamic';
+import { getBaseUrl } from "lib/utils";
 
 type PageProps = {
   params: Promise<{
@@ -55,7 +52,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const componentProps = await client.getComponentData(
     page.layout,
     {},
-    components
+    components,
   );
 
   return (
@@ -81,7 +78,7 @@ export const generateStaticParams = async () => {
       : sites.map((site: SiteInfo) => site.name);
     return await client.getAppRouterStaticParams(
       allowedSites,
-      routing.locales.slice()
+      routing.locales.slice(),
     );
   }
   return [];
@@ -89,10 +86,7 @@ export const generateStaticParams = async () => {
 
 // Metadata fields for the page.
 export const generateMetadata = async ({ params }: PageProps) => {
-  const headersList = await headers();
-  const host = headersList.get("host") || "";
-  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (host ? `${protocol}://${host}` : "");
+  const baseUrl = getBaseUrl();
 
   const { path, site, locale } = await params;
 

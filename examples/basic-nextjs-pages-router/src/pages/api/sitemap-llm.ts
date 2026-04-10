@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { SiteResolver } from '@sitecore-content-sdk/core/site';
-import type { SitemapXmlOptions } from '@sitecore-content-sdk/core/client';
+import { SiteResolver } from '@sitecore-content-sdk/content/site';
+import type { SitemapXmlOptions } from '@sitecore-content-sdk/content/client';
 import type { SiteInfo } from '@sitecore-content-sdk/nextjs';
 import scClient from 'lib/sitecore-client';
 import sites from '.sitecore/sites.json';

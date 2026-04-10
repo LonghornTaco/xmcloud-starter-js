@@ -8,7 +8,7 @@ import React from 'react';
 import { Link, Text, AppPlaceholder, RichText, NextImage, useSitecore, CdpHelper, withDatasourceCheck } from '@sitecore-content-sdk/nextjs';
 import componentMap from '.sitecore/component-map';
 import client from 'src/lib/sitecore-client';
-import { pageView } from '@sitecore-cloudsdk/events/browser';
+import { pageView } from '@sitecore-content-sdk/events';
 import config from 'sitecore.config';
 
 const importMap = [
@@ -46,7 +46,7 @@ const importMap = [
     ]
   },
   {
-    module: '@sitecore-cloudsdk/events/browser',
+    module: '@sitecore-content-sdk/events',
     exports: [
       { name: 'pageView', value: pageView },
     ]

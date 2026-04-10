@@ -136,7 +136,7 @@ Run these from **inside a starter directory** (e.g. `examples/kit-nextjs-skate-p
 ### Required Environment Variables
 
 All starters require these environment variables:
-- `SITECORE_EDGE_URL` - XM Cloud Edge URL
+- `NEXT_PUBLIC_SITECORE_EDGE_PLATFORM_HOSTNAME` - XM Cloud Edge URL
 - `SITECORE_EDGE_CONTEXT_ID` - XM Cloud Edge Context ID
 - `NEXT_PUBLIC_DEFAULT_SITE_NAME` - Default site name
 - `NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID` - Public Edge Context ID

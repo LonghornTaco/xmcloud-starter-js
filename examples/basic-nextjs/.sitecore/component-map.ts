@@ -9,7 +9,7 @@ import * as PartialDesignDynamicPlaceholder from 'src/components/partial-design-
 export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['BYOCWrapper', BYOCServerWrapper],
   ['FEaaSWrapper', FEaaSServerWrapper],
-  ['Form', Form],
+  ['Form', { ...Form, componentType: 'client' }],
   ['PartialDesignDynamicPlaceholder', { ...PartialDesignDynamicPlaceholder }],
 ]);
 

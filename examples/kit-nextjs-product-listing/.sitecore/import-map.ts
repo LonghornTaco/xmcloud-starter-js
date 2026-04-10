@@ -161,7 +161,7 @@ import { GlobalFooterBlueCentered } from 'src/components/global-footer/GlobalFoo
 import { GlobalFooterBlueCompact } from 'src/components/global-footer/GlobalFooterBlueCompact.dev';
 import { Default as Default_ab2672a1842323b1b2777329b20d99d0ca10e44b } from '@/components/animated-section/AnimatedSection.dev';
 import client from 'src/lib/sitecore-client';
-import { pageView } from '@sitecore-cloudsdk/events/browser';
+import { pageView } from '@sitecore-content-sdk/events';
 import config from 'sitecore.config';
 import { getContainerPlaceholderProps, isContainerPlaceholderEmpty } from '@/components/container/container.util';
 import { Carousel as Carousel_689a09d2932fc88fd54b2c5679f911ae91683185, CarouselContent as CarouselContent_689a09d2932fc88fd54b2c5679f911ae91683185, CarouselItem as CarouselItem_689a09d2932fc88fd54b2c5679f911ae91683185, CarouselNext as CarouselNext_689a09d2932fc88fd54b2c5679f911ae91683185, CarouselPrevious as CarouselPrevious_689a09d2932fc88fd54b2c5679f911ae91683185 } from 'shadcn/components/ui/carousel';
@@ -1210,7 +1210,7 @@ const importMap = [
     ]
   },
   {
-    module: '@sitecore-cloudsdk/events/browser',
+    module: '@sitecore-content-sdk/events',
     exports: [
       { name: 'pageView', value: pageView },
     ]
