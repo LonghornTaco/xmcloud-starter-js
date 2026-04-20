@@ -165,7 +165,7 @@ export const componentMap = new Map<string, NextjsContentSdkComponent>([
   ['Navigation', { ...Navigation }],
   ['LinkList', { ...LinkList }],
   ['Image', { ...Image, componentType: 'client' }],
-  ['ContentBlock', { ...ContentBlock }],
+  ['ContentBlock', { ...ContentBlock, componentType: 'client' }],
   ['Container', { ...Container }],
   ['ColumnSplitter', { ...ColumnSplitter }],
   ['SubscriptionBanner', { ...SubscriptionBanner, componentType: 'client' }],
