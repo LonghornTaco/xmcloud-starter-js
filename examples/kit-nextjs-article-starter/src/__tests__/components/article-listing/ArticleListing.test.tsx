@@ -120,8 +120,9 @@ describe('ArticleListing Component', () => {
     it('should render with aria-label', () => {
       const { container } = render(<ArticleListing {...(defaultProps as unknown as Parameters<typeof ArticleListing>[0])} />);
 
-      const component = container.querySelector('[aria-label="Article listing section"]');
-      expect(component).toBeInTheDocument();
+      const section = container.querySelector('section[data-component="ArticleListing"]');
+      expect(section).toBeInTheDocument();
+      expect(section).toHaveAttribute('aria-labelledby', 'article-listing-section');
     });
   });
 

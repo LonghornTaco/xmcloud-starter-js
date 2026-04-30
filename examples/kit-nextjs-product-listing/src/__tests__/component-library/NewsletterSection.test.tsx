@@ -12,7 +12,7 @@ import {
   NewsletterSection8,
 } from '../../components/component-library/NewsletterSection';
 
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Mock Sitecore Content SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   NextImage: ({ field, className }: any) => (

@@ -49,10 +49,11 @@ This repository contains **XM Cloud Front End Application Starter Kits** - multi
 - **npm** - Package management across all starter applications
 
 ### File Organization:
+- Each starter is independent and self-contained; do not share code or packages across starters—copy utilities and components as needed
 - Component directories contain main file, variants, and props
 - Main component file should contain variants and props following the Locality of Behavior pattern
 - Using `.dev.tsx` files for variant implementations is discouraged unless maintainability becomes difficult for the component and separation cannot be avoided
-- Shared utilities in dedicated directories
+- Shared utilities in dedicated directories (within each starter)
 - Group UI components in `ui/` subdirectory
 
 ## Coding Standards

@@ -1,6 +1,6 @@
 import { isDesignLibraryPreviewData } from "@sitecore-content-sdk/nextjs/editing";
 import { notFound } from "next/navigation";
-import { draftMode, headers } from "next/headers";
+import { draftMode } from "next/headers";
 import { SiteInfo } from "@sitecore-content-sdk/nextjs";
 import sites from ".sitecore/sites.json";
 import { routing } from "src/i18n/routing";
@@ -26,13 +26,7 @@ type PageProps = {
 export default async function Page({ params, searchParams }: PageProps) {
   const { site, locale, path } = await params;
   const draft = await draftMode();
-  const headersList = await headers();
-  const host = headersList.get("host") ?? "";
-  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (host ? `${protocol}://${host}` : "") ||
-    getBaseUrl();
+  const baseUrl = getBaseUrl();
 
   // Set site and locale to be available in src/i18n/request.ts for fetching the dictionary
   setRequestLocale(`${site}_${locale}`);
@@ -59,7 +53,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const componentProps = await client.getComponentData(
     page.layout,
     {},
-    components
+    components,
   );
 
   return (
@@ -86,7 +80,7 @@ export const generateStaticParams = async () => {
 
     return await client.getAppRouterStaticParams(
       allowedSites,
-      routing.locales.slice()
+      routing.locales.slice(),
     );
   }
   return [];
@@ -94,14 +88,8 @@ export const generateStaticParams = async () => {
 
 // Metadata fields for the page.
 export const generateMetadata = async ({ params }: PageProps) => {
-  const headersList = await headers();
-  const host = headersList.get("host") ?? "";
-  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (host ? `${protocol}://${host}` : "") ||
-    getBaseUrl();
-
+  const baseUrl = getBaseUrl();
+  
   const { path, site, locale } = await params;
 
   // Canonical URL: base URL + content path only (no site/locale segments)

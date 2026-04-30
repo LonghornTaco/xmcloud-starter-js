@@ -11,6 +11,8 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   testTimeout: 15000,
   moduleNameMapper: {
+    // Resolve sitecore.config for tests (CdpPageView and others)
+    '^sitecore\\.config$': '<rootDir>/sitecore.config.ts',
     // Handle module aliases (should match paths in tsconfig.json)
     '^@/(.*)$': '<rootDir>/src/$1',
     '^components/(.*)$': '<rootDir>/src/components/$1',

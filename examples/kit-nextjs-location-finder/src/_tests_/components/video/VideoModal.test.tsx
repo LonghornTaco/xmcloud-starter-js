@@ -19,8 +19,8 @@ jest.mock('focus-trap-react', () => ({
 }));
 
 // Mock framer-motion
-jest.mock('framer-motion', () => ({
-  motion: {
+jest.mock('framer-motion', () => {
+  const motion = {
     div: ({
       children,
       onClick,
@@ -38,9 +38,9 @@ jest.mock('framer-motion', () => ({
         {children}
       </div>
     ),
-  },
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-}));
+  };
+  return { motion, m: motion, AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</> };
+});
 
 // Mock lucide-react
 jest.mock('lucide-react', () => ({

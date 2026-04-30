@@ -313,20 +313,10 @@ SharedFields:
             $item."metadataTitle" = $title
             $item."metadataDescription" = $description
             $item."metadataKeywords" = "Alaris, electric vehicles, EV, sustainable cars, future mobility"
+            $item."metadataAuthor" = "Sitecore"
             $item."ogTitle" = $title
             $item."ogDescription" = $description
             $item."ogImage" = "<image mediaid=`"{34DE6E63-EE15-4D55-AEEA-C5600D7E7EB8}`" />"
-    
-            # Add Promo variants
-            $promoVariant = Get-Item -Path "$sitePath/Presentation/Headless Variants/Promo" -Language $Site.Language
-            $imageLeftVariant = New-Item -Parent $promoVariant -Name "ImageLeft" -ItemType "{4D50CDAE-C2D9-4DE8-B080-8F992BFB1B55}"
-            $imageLeftVariant.'__Display name' = "Image Left"
-            $imageMiddleVariant = New-Item -Parent $promoVariant -Name "ImageMiddle" -ItemType "{4D50CDAE-C2D9-4DE8-B080-8F992BFB1B55}"
-            $imageMiddleVariant.'__Display name' = "Image Middle"
-            $imageRightVariant = New-Item -Parent $promoVariant -Name "ImageRight" -ItemType "{4D50CDAE-C2D9-4DE8-B080-8F992BFB1B55}"
-            $imageRightVariant.'__Display name' = "Image Right"
-            $titlePartialOverlayVariant = New-Item -Parent $promoVariant -Name "TitlePartialOverlay" -ItemType "{4D50CDAE-C2D9-4DE8-B080-8F992BFB1B55}"
-            $titlePartialOverlayVariant.'__Display name' = "Title Partial Overlay"
     
             Write-Verbose "Create AI config at $sitePath/Data/AI"
             $dataFolderPath = "$sitePath/Data"

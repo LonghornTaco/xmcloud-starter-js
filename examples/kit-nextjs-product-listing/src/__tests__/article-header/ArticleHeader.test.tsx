@@ -44,6 +44,7 @@ jest.mock('../../components/ui/avatar', () => ({
     <div data-testid="avatar">{children}</div>
   ),
   AvatarImage: ({ src, alt }: { src?: string; alt?: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element -- test mock; not using next/image
     <img src={src} alt={alt} data-testid="avatar-image" />
   ),
   AvatarFallback: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
@@ -62,6 +63,7 @@ jest.mock('../../components/ui/toaster', () => ({
 jest.mock('../../components/image/ImageWrapper.dev', () => ({
   __esModule: true,
   Default: ({ image, alt }: { image?: { value?: { src?: string } }; alt?: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element -- test mock; not using next/image
     <img src={image?.value?.src} alt={alt} data-testid="image-wrapper" />
   ),
 }));
@@ -192,7 +194,6 @@ describe('ArticleHeader', () => {
 
   it('handles reduced motion preference', async () => {
     // Mock matchMedia to simulate reduced motion preference
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockMatchMedia = jest.fn().mockImplementation((query: string) => ({
       matches: query === '(prefers-reduced-motion: reduce)',
       media: query,

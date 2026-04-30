@@ -2,7 +2,7 @@
 
 import { CdpHelper, useSitecore } from '@sitecore-content-sdk/nextjs';
 import { useEffect } from 'react';
-import { pageView } from '@sitecore-cloudsdk/events/browser';
+import { pageView } from '@sitecore-content-sdk/events';
 import config from 'sitecore.config';
 import { JSX } from 'react';
 
@@ -42,7 +42,7 @@ const CdpPageView = (): JSX.Element => {
     }
 
     // Skip page view tracking when Edge API is not configured
-    if (!config.api.edge?.clientContextId) {
+    if (!config?.api?.edge?.clientContextId) {
       return;
     }
 

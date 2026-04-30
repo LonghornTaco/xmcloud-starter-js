@@ -35,6 +35,8 @@ import { useSitecore } from '@sitecore-content-sdk/nextjs';
 
 const mockUseSitecore = useSitecore as jest.MockedFunction<typeof useSitecore>;
 
+type PageContentTestProps = React.ComponentProps<typeof PageContent>;
+
 describe('PageContent Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -43,7 +45,7 @@ describe('PageContent Component', () => {
 
   describe('Basic rendering', () => {
     it('should render page content with default structure', () => {
-      const { container } = render(<PageContent {...defaultProps} />);
+      const { container } = render(<PageContent {...(defaultProps as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toBeInTheDocument();
@@ -51,7 +53,7 @@ describe('PageContent Component', () => {
     });
 
     it('should render rich text content', () => {
-      render(<PageContent {...defaultProps} />);
+      render(<PageContent {...(defaultProps as unknown as PageContentTestProps)} />);
 
       const richText = screen.getByTestId('rich-text');
       expect(richText).toBeInTheDocument();
@@ -59,14 +61,14 @@ describe('PageContent Component', () => {
     });
 
     it('should have correct rendering identifier', () => {
-      const { container } = render(<PageContent {...defaultProps} />);
+      const { container } = render(<PageContent {...(defaultProps as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toHaveAttribute('id', 'page-content-id');
     });
 
     it('should apply field-content class to rich text', () => {
-      render(<PageContent {...defaultProps} />);
+      render(<PageContent {...(defaultProps as unknown as PageContentTestProps)} />);
 
       const richText = screen.getByTestId('rich-text');
       expect(richText).toHaveClass('field-content');
@@ -75,7 +77,7 @@ describe('PageContent Component', () => {
 
   describe('Component structure', () => {
     it('should render correct DOM structure', () => {
-      const { container } = render(<PageContent {...defaultProps} />);
+      const { container } = render(<PageContent {...(defaultProps as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toBeInTheDocument();
@@ -88,7 +90,7 @@ describe('PageContent Component', () => {
     });
 
     it('should combine component classes correctly', () => {
-      const { container } = render(<PageContent {...defaultProps} />);
+      const { container } = render(<PageContent {...(defaultProps as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toHaveClass('component', 'page-content', 'custom-page-content-style');
@@ -97,7 +99,7 @@ describe('PageContent Component', () => {
 
   describe('Styles and parameters', () => {
     it('should handle empty Styles parameter', () => {
-      const { container } = render(<PageContent {...propsWithoutStyles} />);
+      const { container } = render(<PageContent {...(propsWithoutStyles as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toHaveClass('component', 'page-content');
@@ -105,14 +107,14 @@ describe('PageContent Component', () => {
     });
 
     it('should handle undefined Styles parameter', () => {
-      const { container } = render(<PageContent {...propsWithUndefinedParams} />);
+      const { container } = render(<PageContent {...(propsWithUndefinedParams as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toBeInTheDocument();
     });
 
     it('should handle empty RenderingIdentifier', () => {
-      const { container } = render(<PageContent {...propsWithoutId} />);
+      const { container } = render(<PageContent {...(propsWithoutId as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).not.toHaveAttribute('id');
@@ -127,7 +129,7 @@ describe('PageContent Component', () => {
         } as unknown as typeof defaultProps.params,
       };
 
-      const { container } = render(<PageContent {...propsWithUndefinedId} />);
+      const { container } = render(<PageContent {...(propsWithUndefinedId as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).not.toHaveAttribute('id');
@@ -137,7 +139,7 @@ describe('PageContent Component', () => {
   describe('Fallback rendering', () => {
     it('should render fallback when fields is missing', () => {
       mockUseSitecore.mockReturnValue(mockSitecoreContextWithoutContent as unknown as ReturnType<typeof useSitecore>);
-      const { container } = render(<PageContent {...propsWithoutFields} />);
+      const { container } = render(<PageContent {...(propsWithoutFields as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toBeInTheDocument();
@@ -150,7 +152,7 @@ describe('PageContent Component', () => {
 
     it('should render fallback when Content field is missing', () => {
       mockUseSitecore.mockReturnValue(mockSitecoreContextWithoutContent as unknown as ReturnType<typeof useSitecore>);
-      const { container } = render(<PageContent {...propsWithoutContentField} />);
+      const { container } = render(<PageContent {...(propsWithoutContentField as unknown as PageContentTestProps)} />);
 
       const componentContent = container.querySelector('.component-content');
       const fallback = componentContent?.querySelector('.field-content');
@@ -160,7 +162,11 @@ describe('PageContent Component', () => {
 
     it('should render fallback when Content field is null', () => {
       mockUseSitecore.mockReturnValue(mockSitecoreContextWithoutContent as unknown as ReturnType<typeof useSitecore>);
-      const { container } = render(<PageContent {...propsWithNullContent} />);
+      const { container } = render(
+        <PageContent
+          {...({ ...propsWithNullContent, page: mockSitecoreContextWithoutContent.page } as unknown as PageContentTestProps)}
+        />
+      );
 
       const componentContent = container.querySelector('.component-content');
       const fallback = componentContent?.querySelector('.field-content');
@@ -170,7 +176,7 @@ describe('PageContent Component', () => {
 
     it('should render fallback with correct structure', () => {
       mockUseSitecore.mockReturnValue(mockSitecoreContextWithoutContent as unknown as ReturnType<typeof useSitecore>);
-      const { container } = render(<PageContent {...propsWithoutFields} />);
+      const { container } = render(<PageContent {...(propsWithoutFields as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toHaveClass('no-fields-style');
@@ -186,8 +192,7 @@ describe('PageContent Component', () => {
 
   describe('Route content fallback', () => {
     it('should use route content when fields.Content is missing', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContext as unknown as ReturnType<typeof useSitecore>);
-      render(<PageContent {...propsWithoutContentField} />);
+      render(<PageContent {...({ ...propsWithoutContentField, page: mockSitecoreContext.page } as unknown as PageContentTestProps)} />);
 
       const richText = screen.getByTestId('rich-text');
       expect(richText).toBeInTheDocument();
@@ -196,7 +201,7 @@ describe('PageContent Component', () => {
 
     it('should prefer fields.Content over route content', () => {
       mockUseSitecore.mockReturnValue(mockSitecoreContext as unknown as ReturnType<typeof useSitecore>);
-      render(<PageContent {...defaultProps} />);
+      render(<PageContent {...(defaultProps as unknown as PageContentTestProps)} />);
 
       const richText = screen.getByTestId('rich-text');
       expect(richText).toHaveTextContent('This is page content');
@@ -204,8 +209,7 @@ describe('PageContent Component', () => {
     });
 
     it('should use route content when fields is undefined', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContext as unknown as ReturnType<typeof useSitecore>);
-      render(<PageContent {...propsWithoutFields} />);
+      render(<PageContent {...({ ...propsWithoutFields, page: mockSitecoreContext.page } as unknown as PageContentTestProps)} />);
 
       const richText = screen.getByTestId('rich-text');
       expect(richText).toBeInTheDocument();
@@ -214,7 +218,7 @@ describe('PageContent Component', () => {
 
     it('should handle empty content gracefully', () => {
       mockUseSitecore.mockReturnValue(mockSitecoreContext as unknown as ReturnType<typeof useSitecore>);
-      render(<PageContent {...propsWithEmptyContent} />);
+      render(<PageContent {...(propsWithEmptyContent as unknown as PageContentTestProps)} />);
 
       const richText = screen.getByTestId('rich-text');
       expect(richText).toBeInTheDocument();
@@ -226,11 +230,13 @@ describe('PageContent Component', () => {
     it('should handle missing params gracefully', () => {
       const emptyParams = {} as typeof defaultProps.params;
       const propsWithoutParams = {
+        rendering: defaultProps.rendering,
         params: emptyParams,
         fields: defaultProps.fields,
+        page: defaultProps.page,
       };
 
-      const { container } = render(<PageContent {...propsWithoutParams} />);
+      const { container } = render(<PageContent {...(propsWithoutParams as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toBeInTheDocument();
@@ -238,7 +244,7 @@ describe('PageContent Component', () => {
 
     it('should handle undefined page context', () => {
       mockUseSitecore.mockReturnValue({ page: undefined } as unknown as ReturnType<typeof useSitecore>);
-      const { container } = render(<PageContent {...propsWithoutFields} />);
+      const { container } = render(<PageContent {...(propsWithoutFields as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent).toBeInTheDocument();
@@ -260,7 +266,7 @@ describe('PageContent Component', () => {
         },
       } as unknown as ReturnType<typeof useSitecore>);
 
-      const { container } = render(<PageContent {...propsWithoutContentField} />);
+      const { container } = render(<PageContent {...(propsWithoutContentField as unknown as PageContentTestProps)} />);
 
       const fallback = container.querySelector('.field-content');
       expect(fallback).toHaveTextContent('[Page Content]');
@@ -277,7 +283,7 @@ describe('PageContent Component', () => {
         },
       } as unknown as ReturnType<typeof useSitecore>);
 
-      const { container } = render(<PageContent {...propsWithoutFields} />);
+      const { container } = render(<PageContent {...(propsWithoutFields as unknown as PageContentTestProps)} />);
 
       const fallback = container.querySelector('.field-content');
       expect(fallback).toHaveTextContent('[Page Content]');
@@ -292,7 +298,7 @@ describe('PageContent Component', () => {
         },
       };
 
-      const { container } = render(<PageContent {...propsWithTrailingSpace} />);
+      const { container } = render(<PageContent {...(propsWithTrailingSpace as unknown as PageContentTestProps)} />);
 
       const pageContent = container.querySelector('.component.page-content');
       expect(pageContent?.className).toBe('component page-content custom-style   ');
@@ -301,14 +307,14 @@ describe('PageContent Component', () => {
 
   describe('Content rendering', () => {
     it('should render HTML content from rich text field', () => {
-      render(<PageContent {...defaultProps} />);
+      render(<PageContent {...(defaultProps as unknown as PageContentTestProps)} />);
 
       const richText = screen.getByTestId('rich-text');
       expect(richText).toHaveTextContent('This is page content');
     });
 
     it('should pass correct field to RichText component', () => {
-      render(<PageContent {...defaultProps} />);
+      render(<PageContent {...(defaultProps as unknown as PageContentTestProps)} />);
 
       const richText = screen.getByTestId('rich-text');
       expect(richText).toHaveClass('field-content');
@@ -316,12 +322,10 @@ describe('PageContent Component', () => {
     });
 
     it('should render route content with correct field class', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContext as unknown as ReturnType<typeof useSitecore>);
-      render(<PageContent {...propsWithoutContentField} />);
+      render(<PageContent {...({ ...propsWithoutContentField, page: mockSitecoreContext.page } as unknown as PageContentTestProps)} />);
 
       const richText = screen.getByTestId('rich-text');
       expect(richText).toHaveClass('field-content');
     });
   });
 });
-

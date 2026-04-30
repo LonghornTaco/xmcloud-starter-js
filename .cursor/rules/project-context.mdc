@@ -69,6 +69,9 @@ Content-First Development:
 
 ## Constraints and Guidelines
 
+Starter Independence:
+- Each starter is a standalone application. Copy shared utilities and components into the starter; do not create shared packages or symlinks across starters. Each starter can be run and maintained independently.
+
 File Organization:
 - Each starter maintains its own `src/` directory structure
 - Shared utilities should be copied, not shared (no monorepo linking)

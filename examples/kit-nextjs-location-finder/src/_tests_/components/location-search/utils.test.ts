@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- test file mocks console to suppress output */
 import {
   calculateHaversineDistance,
   geocodeAddress,

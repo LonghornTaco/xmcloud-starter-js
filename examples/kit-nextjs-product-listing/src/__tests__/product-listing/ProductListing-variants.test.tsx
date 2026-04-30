@@ -1,8 +1,10 @@
 import React from 'react';
 import { render, cleanup, screen } from '@testing-library/react';
 import * as ProductListing from '@/components/product-listing/ProductListing';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  defaultProductListingProps,
+  productListingPropsEditing,
+} from './ProductListing.mockProps';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -36,39 +38,7 @@ jest.mock('@/components/product-listing/ProductListingSlider.dev', () => ({
 }));
 
 describe('ProductListing Variants', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mockProps: any = {
-    rendering: {
-      uid: 'test-uid',
-      componentName: 'ProductListing',
-      dataSource: 'test-datasource',
-    },
-    params: {},
-    page: {
-      mode: {
-        isEditing: false,
-        isNormal: true,
-        isPreview: false,
-      },
-    },
-    fields: {
-      data: {
-        datasource: {
-          title: { jsonValue: { value: 'Test Title' } },
-          viewAllLink: { jsonValue: { value: { href: '/products', text: 'View All' } } },
-          products: {
-            targetItems: [
-              {
-                id: 'product-1',
-                name: 'Product 1',
-              },
-            ],
-          },
-        },
-      },
-    },
-    isPageEditing: false,
-  };
+  const mockProps = defaultProductListingProps;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -83,17 +53,7 @@ describe('ProductListing Variants', () => {
     });
 
     it('renders ProductListingDefault when in editing mode', () => {
-      const propsWithEditing = {
-        ...mockProps,
-        page: {
-          mode: {
-            isEditing: true,
-            isNormal: false,
-            isPreview: false,
-          },
-        },
-      };
-      const { getByTestId } = render(<ProductListing.Default {...propsWithEditing} />);
+      const { getByTestId } = render(<ProductListing.Default {...productListingPropsEditing} />);
 
       expect(getByTestId('product-listing-default')).toBeInTheDocument();
       expect(getByTestId('product-listing-default')).toHaveAttribute('data-editing', 'true');
@@ -122,17 +82,7 @@ describe('ProductListing Variants', () => {
     });
 
     it('renders ProductListingThreeUp when in editing mode', () => {
-      const propsWithEditing = {
-        ...mockProps,
-        page: {
-          mode: {
-            isEditing: true,
-            isNormal: false,
-            isPreview: false,
-          },
-        },
-      };
-      const { getByTestId } = render(<ProductListing.ThreeUp {...propsWithEditing} />);
+      const { getByTestId } = render(<ProductListing.ThreeUp {...productListingPropsEditing} />);
 
       expect(getByTestId('product-listing-three-up')).toBeInTheDocument();
       expect(getByTestId('product-listing-three-up')).toHaveAttribute('data-editing', 'true');
@@ -161,17 +111,7 @@ describe('ProductListing Variants', () => {
     });
 
     it('renders ProductListingSlider when in editing mode', () => {
-      const propsWithEditing = {
-        ...mockProps,
-        page: {
-          mode: {
-            isEditing: true,
-            isNormal: false,
-            isPreview: false,
-          },
-        },
-      };
-      const { getByTestId } = render(<ProductListing.Slider {...propsWithEditing} />);
+      const { getByTestId } = render(<ProductListing.Slider {...productListingPropsEditing} />);
 
       expect(getByTestId('product-listing-slider')).toBeInTheDocument();
       expect(getByTestId('product-listing-slider')).toHaveAttribute('data-editing', 'true');
@@ -193,43 +133,29 @@ describe('ProductListing Variants', () => {
 
   describe('Integration with page prop', () => {
     it('correctly extracts isPageEditing from page prop for all variants', () => {
-      const propsWithEditing = {
-        ...mockProps,
-        page: {
-          mode: {
-            isEditing: true,
-            isNormal: false,
-            isPreview: false,
-          },
-        },
-      };
-
-      const { getByTestId: getDefaultTestId, unmount: unmountDefault } = render(<ProductListing.Default {...propsWithEditing} />);
+      const { getByTestId: getDefaultTestId, unmount: unmountDefault } = render(
+        <ProductListing.Default {...productListingPropsEditing} />
+      );
       expect(getDefaultTestId('product-listing-default')).toHaveAttribute('data-editing', 'true');
       unmountDefault();
 
-      const { getByTestId: getThreeUpTestId, unmount: unmountThreeUp } = render(<ProductListing.ThreeUp {...propsWithEditing} />);
+      const { getByTestId: getThreeUpTestId, unmount: unmountThreeUp } = render(
+        <ProductListing.ThreeUp {...productListingPropsEditing} />
+      );
       expect(getThreeUpTestId('product-listing-three-up')).toHaveAttribute('data-editing', 'true');
       unmountThreeUp();
 
-      const { getByTestId: getSliderTestId } = render(<ProductListing.Slider {...propsWithEditing} />);
+      const { getByTestId: getSliderTestId } = render(
+        <ProductListing.Slider {...productListingPropsEditing} />
+      );
       expect(getSliderTestId('product-listing-slider')).toHaveAttribute('data-editing', 'true');
     });
 
     it('handles different editing states correctly', () => {
       // Test editing mode
-      const propsWithEditing = {
-        ...mockProps,
-        page: {
-          mode: {
-            isEditing: true,
-            isNormal: false,
-            isPreview: false,
-          },
-        },
-      };
-
-      const { getByTestId: getEditingTestId } = render(<ProductListing.Default {...propsWithEditing} />);
+      const { getByTestId: getEditingTestId } = render(
+        <ProductListing.Default {...productListingPropsEditing} />
+      );
       expect(getEditingTestId('product-listing-default')).toHaveAttribute('data-editing', 'true');
 
       // Clean up before rendering in non-editing mode

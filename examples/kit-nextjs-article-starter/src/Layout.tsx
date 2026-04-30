@@ -36,6 +36,7 @@ export interface RouteFields {
   [key: string]: unknown;
   Title?: Field;
   metadataTitle?: Field;
+  metadataAuthor?: Field;
   metadataKeywords?: Field;
   pageTitle?: Field;
   metadataDescription?: Field;

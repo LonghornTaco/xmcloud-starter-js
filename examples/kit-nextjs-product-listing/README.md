@@ -32,7 +32,7 @@ SYNC is a clean, bold, product-focused site template with a homepage, subpage, n
     ```cd examples\kit-nextjs-product-listing\```
 3. Copy the environment file ```.env.remote.example```
 4. Rename the copied file to ```.env.local```
-5. Edit ```.env.local``` and provide a value for ```SITECORE_EDGE_CONTEXT_ID```, ```NEXT_PUBLIC_DEFAULT_SITE_NAME```, ```NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID```, ```SITECORE_EDITING_SECRET```. (More info: [Environment variables in XM Cloud](https://doc.sitecore.com/xmc/en/developers/xm-cloud/get-the-environment-variables-for-a-site.html))
+5. Edit ```.env.local``` and provide a value for ```SITECORE_EDGE_CONTEXT_ID```, ```NEXT_PUBLIC_DEFAULT_SITE_NAME```, ```NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID```, ```SITECORE_EDITING_SECRET```. (More info: [Environment variables in XM Cloud](https://doc.sitecore.com/xmc/en/developers/xm-cloud/get-the-environment-variables-for-a-site.html)) Optionally set ```NEXT_PUBLIC_SITE_URL``` or ```NEXT_PUBLIC_BASE_URL``` to your public site origin when server-rendered code must build absolute URLs without the request ```Host``` header (see ```.env.remote.example```).
 
 6. Install dependencies:
    from ```kit-nextjs-product-listing``` run ```npm install```
@@ -65,4 +65,5 @@ Additional Info: You do not have to create rendering host items in XM Cloud as t
 
 ## Documentation
 
-[Documentation](https://doc.sitecore.com/xmc/en/developers/content-sdk/sitecore-content-sdk-for-xm-cloud.html)
+- [Skills: capability map for this starter](Skills.md) — High-level capability groupings; see also the repo [docs/Skills.md](../../docs/Skills.md).
+- [Sitecore Content SDK for XM Cloud](https://doc.sitecore.com/xmc/en/developers/content-sdk/sitecore-content-sdk-for-xm-cloud.html)

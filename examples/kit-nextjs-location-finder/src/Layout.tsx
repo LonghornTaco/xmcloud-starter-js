@@ -43,6 +43,7 @@ interface LayoutProps {
 export interface RouteFields {
   [key: string]: unknown;
   metadataTitle?: Field;
+  metadataAuthor?: Field;
   metadataKeywords?: Field;
   pageTitle?: Field;
   metadataDescription?: Field;

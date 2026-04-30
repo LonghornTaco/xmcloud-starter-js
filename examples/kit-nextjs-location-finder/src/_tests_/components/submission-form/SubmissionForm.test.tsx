@@ -1,8 +1,38 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Default as SubmissionForm, Centered } from '@/components/submission-form/SubmissionForm';
 import { mockSubmissionFormProps } from './submission-form.mock.props';
+
+// Mock child components first (used by SubmissionForm mock)
+jest.mock('@/components/submission-form/SubmissionFormDefault.dev', () => ({
+  SubmissionFormDefault: ({ isPageEditing }: { isPageEditing?: boolean }) => (
+    <section data-testid="submission-form-default">
+      SubmissionFormDefault - {isPageEditing ? 'Editing' : 'Normal'}
+    </section>
+  ),
+}));
+
+jest.mock('@/components/submission-form/SubmissionFormCentered.dev', () => ({
+  SubmissionFormCentered: ({ isPageEditing }: { isPageEditing?: boolean }) => (
+    <section data-testid="submission-form-centered">
+      SubmissionFormCentered - {isPageEditing ? 'Editing' : 'Normal'}
+    </section>
+  ),
+}));
+
+// Mock SubmissionForm to bypass next/dynamic and render mocked children directly
+jest.mock('@/components/submission-form/SubmissionForm', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Jest mock factory needs require
+  const { SubmissionFormDefault } = require('@/components/submission-form/SubmissionFormDefault.dev');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- Jest mock factory needs require
+  const { SubmissionFormCentered } = require('@/components/submission-form/SubmissionFormCentered.dev');
+  return {
+    Default: (props: Record<string, unknown>) => <SubmissionFormDefault {...props} isPageEditing={false} />,
+    Centered: (props: Record<string, unknown>) => <SubmissionFormCentered {...props} isPageEditing={false} />,
+  };
+});
+
+import { Default as SubmissionForm, Centered } from '@/components/submission-form/SubmissionForm';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -15,23 +45,6 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       },
     },
   })),
-}));
-
-// Mock child components
-jest.mock('@/components/submission-form/SubmissionFormDefault.dev', () => ({
-  SubmissionFormDefault: ({ isPageEditing }: { isPageEditing: boolean }) => (
-    <section data-testid="submission-form-default">
-      SubmissionFormDefault - {isPageEditing ? 'Editing' : 'Normal'}
-    </section>
-  ),
-}));
-
-jest.mock('@/components/submission-form/SubmissionFormCentered.dev', () => ({
-  SubmissionFormCentered: ({ isPageEditing }: { isPageEditing: boolean }) => (
-    <section data-testid="submission-form-centered">
-      SubmissionFormCentered - {isPageEditing ? 'Editing' : 'Normal'}
-    </section>
-  ),
 }));
 
 describe('SubmissionForm', () => {

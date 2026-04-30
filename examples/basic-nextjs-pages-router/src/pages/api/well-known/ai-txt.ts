@@ -64,10 +64,7 @@ function resolveSiteUrl(req: NextApiRequest): string {
 }
 
 /** API handler that serves the ai.txt file for AI crawlers. */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-): Promise<void> {
+export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     res.status(405).end('Method Not Allowed');

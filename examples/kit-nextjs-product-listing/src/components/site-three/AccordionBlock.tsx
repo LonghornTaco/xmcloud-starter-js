@@ -15,11 +15,6 @@ import {
   AccordionTrigger,
 } from 'shadcd/components/ui/accordion';
 
-/** Returns true if the link has a valid href (not a placeholder like # or http://#). */
-function hasValidLink(link: { value?: { href?: string } } | undefined): boolean {
-  const href = link?.value?.href;
-  return !!(href && href !== '#' && !href.startsWith('http://#'));
-}
 
 interface Fields {
   data: {
@@ -81,17 +76,11 @@ export const Default = (props: AccordionProps) => {
               <p className="text-sm">
                 <ContentSdkText field={datasource?.description?.jsonValue} />
               </p>
-              {datasource?.link?.jsonValue && hasValidLink(datasource.link.jsonValue) ? (
-                <ContentSdkLink
-                  field={datasource.link.jsonValue}
+              <ContentSdkLink
+                  field={datasource?.link?.jsonValue}
                   prefetch={false}
                   className="btn btn-secondary btn-sharp"
                 />
-              ) : datasource?.link?.jsonValue ? (
-                <span className="btn btn-secondary btn-sharp inline-block">
-                  {datasource.link.jsonValue?.value?.text || ''}
-                </span>
-              ) : null}
             </div>
           </div>
         </div>
@@ -120,13 +109,11 @@ export const TwoColumn = (props: AccordionProps) => {
             <p className="text-sm">
               <ContentSdkText field={datasource?.description?.jsonValue} />
             </p>
-            {datasource?.link?.jsonValue && (
-              <ContentSdkLink
-                field={datasource?.link.jsonValue}
-                prefetch={false}
-                className="btn btn-secondary btn-sharp"
-              />
-            )}
+            <ContentSdkLink
+                  field={datasource?.link?.jsonValue}
+                  prefetch={false}
+                  className="btn btn-secondary btn-sharp"
+                />
           </div>
         </div>
       </div>
@@ -154,13 +141,11 @@ export const Vertical = (props: AccordionProps) => {
             <p className="text-sm">
               <ContentSdkText field={datasource?.description?.jsonValue} />
             </p>
-            {datasource?.link?.jsonValue && (
-              <ContentSdkLink
-                field={datasource?.link.jsonValue}
-                prefetch={false}
-                className="btn btn-secondary btn-sharp"
-              />
-            )}
+            <ContentSdkLink
+                  field={datasource?.link?.jsonValue}
+                  prefetch={false}
+                  className="btn btn-secondary btn-sharp"
+                />
           </div>
         </div>
       </div>
@@ -189,13 +174,11 @@ export const BoxedAccordion = (props: AccordionProps) => {
             <p className="text-sm">
               <ContentSdkText field={datasource?.description?.jsonValue} />
             </p>
-            {datasource?.link?.jsonValue && (
-              <ContentSdkLink
-                field={datasource?.link.jsonValue}
-                prefetch={false}
-                className="btn btn-secondary btn-sharp"
-              />
-            )}
+            <ContentSdkLink
+                  field={datasource?.link?.jsonValue}
+                  prefetch={false}
+                  className="btn btn-secondary btn-sharp"
+                />
           </div>
         </div>
       </div>
@@ -223,17 +206,11 @@ export const BoxedContent = (props: AccordionProps) => {
               <p className="text-sm">
                 <ContentSdkText field={datasource?.description?.jsonValue} />
               </p>
-              {datasource?.link?.jsonValue && hasValidLink(datasource.link.jsonValue) ? (
-                <ContentSdkLink
-                  field={datasource.link.jsonValue}
+              <ContentSdkLink
+                  field={datasource?.link?.jsonValue}
                   prefetch={false}
                   className="btn btn-secondary btn-sharp"
                 />
-              ) : datasource?.link?.jsonValue ? (
-                <span className="btn btn-secondary btn-sharp inline-block">
-                  {datasource.link.jsonValue?.value?.text || ''}
-                </span>
-              ) : null}
             </div>
           </div>
         </div>
@@ -241,3 +218,5 @@ export const BoxedContent = (props: AccordionProps) => {
     </section>
   );
 };
+
+

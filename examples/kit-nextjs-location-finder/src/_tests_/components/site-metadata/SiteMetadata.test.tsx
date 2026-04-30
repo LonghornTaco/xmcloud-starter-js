@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as SiteMetadata } from '@/components/site-metadata/SiteMetadata';
 import { Page } from '@sitecore-content-sdk/nextjs';
@@ -29,11 +29,11 @@ describe('SiteMetadata Component', () => {
   const mockRendering = { componentName: 'SiteMetadata' };
 
   beforeEach(() => {
-    // Clear document.head before each test to avoid interference
-    document.head.querySelectorAll('title, meta, link').forEach((el) => el.remove());
+    // Clear any preconnect links from previous tests (in container or head)
+    document.head.querySelectorAll('link[rel="preconnect"]').forEach((el) => el.remove());
   });
 
-  it('renders with complete metadata fields', () => {
+  it('renders preconnect link when fields are provided', () => {
     const props = {
       fields: {
         title: { value: 'Page Title' },
@@ -47,35 +47,20 @@ describe('SiteMetadata Component', () => {
       componentMap: new Map(),
     };
 
-    render(<SiteMetadata {...props} />);
-    
-    // Check if title is rendered (may be in container or document.head)
-    const title = document.querySelector('title') || document.head.querySelector('title');
-    expect(title).toBeInTheDocument();
-    expect(title?.textContent).toBe('Meta Title');
-    
-    // Verify meta tags are rendered (check document.head as React 19 hoists them)
-    const keywordsMeta = document.head.querySelector('meta[name="keywords"]');
-    const descriptionMeta = document.head.querySelector('meta[name="description"]');
-    const viewportMeta = document.head.querySelector('meta[name="viewport"]');
-    const preconnectLink = document.head.querySelector('link[rel="preconnect"]');
-    
-    expect(keywordsMeta).toBeInTheDocument();
-    expect(keywordsMeta).toHaveAttribute('content', 'keyword1, keyword2, keyword3');
-    expect(descriptionMeta).toBeInTheDocument();
-    expect(descriptionMeta).toHaveAttribute('content', 'Page meta description for SEO');
-    expect(viewportMeta).toBeInTheDocument();
-    expect(viewportMeta).toHaveAttribute('content', 'width=device-width, initial-scale=1');
+    const { container } = render(<SiteMetadata {...props} />);
+
+    // Component only renders preconnect link; title/meta are handled by generateMetadata() in page.tsx.
+    const preconnectLink =
+      container.querySelector('link[rel="preconnect"]') ||
+      document.head.querySelector('link[rel="preconnect"]');
     expect(preconnectLink).toBeInTheDocument();
     expect(preconnectLink).toHaveAttribute('href', 'https://fonts.googleapis.com');
   });
 
-  it('uses title when metadataTitle is not provided', () => {
+  it('renders preconnect link with minimal fields', () => {
     const props = {
       fields: {
         title: { value: 'Fallback Title' },
-        metadataKeywords: { value: 'keywords' },
-        metadataDescription: { value: 'description' },
       },
       params: {},
       rendering: mockRendering,
@@ -83,14 +68,49 @@ describe('SiteMetadata Component', () => {
       componentMap: new Map(),
     };
 
-    render(<SiteMetadata {...props} />);
-    const title = document.head.querySelector('title');
-    
-    expect(title).toBeInTheDocument();
-    expect(title?.textContent).toBe('Fallback Title');
+    const { container } = render(<SiteMetadata {...props} />);
+    const preconnectLink =
+      container.querySelector('link[rel="preconnect"]') ||
+      document.head.querySelector('link[rel="preconnect"]');
+    expect(preconnectLink).toBeInTheDocument();
+    expect(preconnectLink).toHaveAttribute('href', 'https://fonts.googleapis.com');
   });
 
-  it('does not render meta tags when keywords and description are empty', () => {
+  it('renders NoDataFallback when fields are missing', () => {
+    const props = {
+      fields: undefined,
+      params: {},
+      rendering: mockRendering,
+      page: mockPageBase,
+      componentMap: new Map(),
+    };
+
+    render(<SiteMetadata {...(props as unknown as React.ComponentProps<typeof SiteMetadata>)} />);
+    expect(screen.getByText(/Site Metadata/i)).toBeInTheDocument();
+  });
+
+  it('renders preconnect link when only metadata fields are provided', () => {
+    const props = {
+      fields: {
+        metadataTitle: { value: 'SEO Title' },
+        metadataKeywords: { value: 'seo, react, testing' },
+        metadataDescription: { value: 'SEO optimized description' },
+      },
+      params: {},
+      rendering: mockRendering,
+      page: mockPageBase,
+      componentMap: new Map(),
+    };
+
+    const { container } = render(<SiteMetadata {...props} />);
+    const preconnectLink =
+      container.querySelector('link[rel="preconnect"]') ||
+      document.head.querySelector('link[rel="preconnect"]');
+    expect(preconnectLink).toBeInTheDocument();
+    expect(preconnectLink).toHaveAttribute('href', 'https://fonts.googleapis.com');
+  });
+
+  it('renders preconnect link when optional metadata fields are empty', () => {
     const props = {
       fields: {
         title: { value: 'Title Only' },
@@ -104,63 +124,13 @@ describe('SiteMetadata Component', () => {
     };
 
     const { container } = render(<SiteMetadata {...props} />);
-    
-    const keywordsMeta = container.querySelector('meta[name="keywords"]');
-    const descriptionMeta = container.querySelector('meta[name="description"]');
-    
-    expect(keywordsMeta).not.toBeInTheDocument();
-    expect(descriptionMeta).not.toBeInTheDocument();
-  });
-
-  it('handles missing optional fields gracefully', () => {
-    const props = {
-      fields: {
-        title: { value: 'Minimal Title' },
-      },
-      params: {},
-      rendering: mockRendering,
-      page: mockPageBase,
-      componentMap: new Map(),
-    };
-
-    render(<SiteMetadata {...props} />);
-    const title = document.head.querySelector('title');
-    
-    expect(title).toBeInTheDocument();
-    expect(title?.textContent).toBe('Minimal Title');
-  });
-
-  it('renders all required HTML meta tags with correct attributes', () => {
-    const props = {
-      fields: {
-        metadataTitle: { value: 'SEO Title' },
-        metadataKeywords: { value: 'seo, react, testing' },
-        metadataDescription: { value: 'SEO optimized description' },
-      },
-      params: {},
-      rendering: mockRendering,
-      page: mockPageBase,
-      componentMap: new Map(),
-    };
-
-    render(<SiteMetadata {...props} />);
-
-    const keywordsMeta = document.head.querySelector('meta[name="keywords"]');
-    const descriptionMeta = document.head.querySelector('meta[name="description"]');
-    const viewportMeta = document.head.querySelector('meta[name="viewport"]');
-    const preconnectLink = document.head.querySelector('link[rel="preconnect"]');
-
-    expect(keywordsMeta).toBeInTheDocument();
-    expect(keywordsMeta).toHaveAttribute('content', 'seo, react, testing');
-    expect(descriptionMeta).toBeInTheDocument();
-    expect(descriptionMeta).toHaveAttribute('content', 'SEO optimized description');
-    expect(viewportMeta).toBeInTheDocument();
-    expect(viewportMeta).toHaveAttribute('content', 'width=device-width, initial-scale=1');
+    const preconnectLink =
+      container.querySelector('link[rel="preconnect"]') ||
+      document.head.querySelector('link[rel="preconnect"]');
     expect(preconnectLink).toBeInTheDocument();
-    expect(preconnectLink).toHaveAttribute('href', 'https://fonts.googleapis.com');
   });
 
-  it('handles empty field values correctly', () => {
+  it('handles empty field values without throwing', () => {
     const props = {
       fields: {
         title: { value: undefined },
@@ -170,6 +140,8 @@ describe('SiteMetadata Component', () => {
       },
       params: {},
       rendering: mockRendering,
+      page: mockPageBase,
+      componentMap: new Map(),
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(() => render(<SiteMetadata {...(props as any)} />)).not.toThrow();

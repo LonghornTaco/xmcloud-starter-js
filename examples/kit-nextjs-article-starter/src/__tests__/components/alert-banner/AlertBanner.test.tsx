@@ -55,6 +55,15 @@ jest.mock('@/components/button-component/ButtonComponent', () => ({
       {buttonLink?.value?.text || 'Button'}
     </a>
   ),
+  EditableButton: ({ buttonLink, variant }: { buttonLink?: { value?: { href?: string; text?: string } }; variant?: string }) => (
+    <a
+      href={buttonLink?.value?.href || '#'}
+      data-testid="alert-button"
+      data-variant={variant}
+    >
+      {buttonLink?.value?.text || 'Button'}
+    </a>
+  ),
 }));
 
 // Mock the UI components

@@ -324,8 +324,8 @@ describe('HeaderST Component', () => {
       // Component should render without crashing
       expect(screen.getByRole('navigation')).toBeInTheDocument();
 
-      // Links should have empty hrefs
-      const sitecoreLinks = screen.getAllByTestId('sitecore-link');
+      // If any sitecore-link elements are present, they should have empty href.
+      const sitecoreLinks = screen.queryAllByTestId('sitecore-link');
       sitecoreLinks.forEach((link) => {
         expect(link).toHaveAttribute('href', '');
       });

@@ -201,7 +201,7 @@ describe('TextBanner Component', () => {
         expect(
           screen.getByText('Discover amazing features and benefits that will transform your experience')
         ).toBeInTheDocument();
-        expect(screen.getByText('Learn More')).toBeInTheDocument();
+        expect(screen.getByText('Read about Welcome to Our Platform')).toBeInTheDocument();
       });
 
       it('should render heading in h3 tag', () => {

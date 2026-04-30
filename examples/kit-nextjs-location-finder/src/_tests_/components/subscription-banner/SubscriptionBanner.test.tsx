@@ -95,9 +95,6 @@ jest.mock('@/components/ui/input', () => {
   return { Input: MockInput };
 });
 
-// Console.log spy for form submission testing
-const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-
 describe('SubscriptionBanner Component', () => {
   const mockRendering = { componentName: 'SubscriptionBanner' };
 
@@ -115,14 +112,6 @@ describe('SubscriptionBanner Component', () => {
     page: mockPageBase,
     componentMap: new Map(),
   } as React.ComponentProps<typeof SubscriptionBanner>;
-
-  beforeEach(() => {
-    consoleSpy.mockClear();
-  });
-
-  afterAll(() => {
-    consoleSpy.mockRestore();
-  });
 
   it('renders all required elements', () => {
     render(<SubscriptionBanner {...defaultProps} />);
@@ -180,20 +169,21 @@ describe('SubscriptionBanner Component', () => {
   });
 
   it('handles form submission correctly', async () => {
-    render(<SubscriptionBanner {...defaultProps} />);
-
-    // Find the form element directly
     const { container } = render(<SubscriptionBanner {...defaultProps} />);
     const form = container.querySelector('form');
+    const submitButton = screen.getByRole('button', { name: 'Subscribe Now' });
+    const emailInput = screen.getByTestId('email-input');
 
     expect(form).toBeInTheDocument();
+    expect(submitButton).not.toBeDisabled();
+    expect(emailInput).not.toBeDisabled();
 
-    if (form) {
-      fireEvent.submit(form);
-      await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith({ email: 'test@example.com' });
-      });
-    }
+    fireEvent.submit(form!);
+
+    await waitFor(() => {
+      expect(submitButton).toBeDisabled();
+      expect(emailInput).toBeDisabled();
+    });
   });
 
   it('disables input and button after submission', async () => {

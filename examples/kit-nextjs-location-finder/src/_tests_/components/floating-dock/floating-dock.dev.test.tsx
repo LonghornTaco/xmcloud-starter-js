@@ -6,9 +6,8 @@ import { FloatingDock } from '@/components/floating-dock/floating-dock.dev';
 // Mock framer-motion
 jest.mock('framer-motion', () => {
   const actual = jest.requireActual('react');
-  return {
-    motion: {
-      div: actual.forwardRef(
+  const motion = {
+    div: actual.forwardRef(
         (
           {
             children,
@@ -55,7 +54,10 @@ jest.mock('framer-motion', () => {
           {children as React.ReactNode}
         </button>
       ),
-    },
+  };
+  return {
+    motion,
+    m: motion,
     AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
     useMotionValue: jest.fn((value: number) => ({
       set: jest.fn(),

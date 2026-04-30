@@ -21,27 +21,6 @@ const mockPageNormal = {
   locale: 'en',
 } as Page;
 
-/**
- * Mock page object for editing mode
- */
-const mockPageEditing = {
-  mode: {
-    isEditing: true,
-    isNormal: false,
-    isPreview: false,
-    name: 'edit' as const,
-    designLibrary: { isVariantGeneration: false },
-    isDesignLibrary: false,
-  },
-  layout: {
-    sitecore: {
-      context: {},
-      route: null,
-    },
-  },
-  locale: 'en',
-} as Page;
-
 // Mock image field
 export const mockImageField: ImageField = {
   value: {

@@ -32,9 +32,18 @@ jest.mock('@/components/multi-promo-tabs/MultiPromoTab.dev', () => ({
   )),
 }));
 
-jest.mock('framer-motion', () => ({
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-}));
+jest.mock('framer-motion', () => {
+  const motion = {
+    div: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => (
+      <div {...props}>{children}</div>
+    ),
+  };
+  return {
+    motion,
+    m: motion,
+    AnimatePresence: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  };
+});
 
 jest.mock('@/components/ui/tabs', () => ({
   Tabs: ({

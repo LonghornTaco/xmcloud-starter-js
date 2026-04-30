@@ -35,9 +35,10 @@ describe('Image Component should', () => {
 
   it('render image caption', () => {
     render(<Image {...mockImagePropsComplete} />);
-    const captionElement = screen.getByText('This is a test image caption');
-    expect(captionElement).toBeInTheDocument();
-    expect(captionElement).toHaveClass('image-caption', 'field-imagecaption');
+    const captionText = screen.getByText('This is a test image caption');
+    expect(captionText).toBeInTheDocument();
+    const figcaption = captionText.closest('figcaption');
+    expect(figcaption).toHaveClass('image-caption', 'field-imagecaption');
   });
 
   it('wrap image in link when TargetUrl is provided', () => {
@@ -83,9 +84,13 @@ describe('Banner Component should', () => {
     expect(getBannerDiv()).toHaveAttribute('id', 'banner-test-id');
   });
 
-  it('apply background image style', () => {
+  it('render banner image', () => {
     render(<Banner {...mockBannerProps} />);
-    expect(document.querySelector('.sc-sxa-image-hero-banner')).toHaveStyle({ backgroundImage: "url('/banner-background.jpg')" });
+    const bannerContent = document.querySelector('.sc-sxa-image-hero-banner');
+    expect(bannerContent).toBeInTheDocument();
+    const imageElement = screen.getByAltText('Banner Background');
+    expect(imageElement).toBeInTheDocument();
+    expect(imageElement).toHaveAttribute('src', '/banner-background.jpg');
   });
 });
 

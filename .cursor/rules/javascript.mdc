@@ -67,7 +67,7 @@ File Organization:
 - Component directories contain main file, variants, and props
 - Main component file should contain variants and props following the Locality of Behavior pattern
 - Using `.dev.tsx` files for variant implementations is discouraged unless maintainability becomes dificult for the componenent and seperation can not be avoided
-- Shared utilities in dedicated directories
+- Shared utilities in dedicated directories within each starter (starters are independent; copy utilities into the starter, do not share across starters)
 - Group UI components in `ui/` subdirectory
 
 ## Error Handling

@@ -45,13 +45,14 @@ jest.mock('@/components/image/ImageWrapper.dev', () => ({
 }));
 
 // Mock framer-motion
-jest.mock('framer-motion', () => ({
-  motion: {
+jest.mock('framer-motion', () => {
+  const motion = {
     div: ({ children, className }: React.HTMLAttributes<HTMLDivElement>) => (
       <div className={className}>{children}</div>
     ),
-  },
-}));
+  };
+  return { motion, m: motion, AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</> };
+});
 
 // Mock isMobile utility
 jest.mock('@/utils/isMobile', () => ({

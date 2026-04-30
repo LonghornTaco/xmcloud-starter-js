@@ -81,6 +81,11 @@ const nextConfig: NextConfig = {
         locale: false,
       },
       {
+        source: '/ai/markdown/:path*',
+        destination: '/api/ai/markdown/:path*',
+        locale: false,
+      },
+      {
         source: '/.well-known/ai.txt',
         destination: '/api/well-known/ai-txt',
         locale: false,

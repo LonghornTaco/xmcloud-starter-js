@@ -32,7 +32,7 @@ Skate Park is a simple website with sample Component implementation showcasing d
     ```cd examples\kit-nextjs-skate-park\```
 3. Copy the environment file ```.env.remote.example```
 4. Rename the copied file to ```.env.local```
-5. Edit ```.env.local``` and provide a value for ```SITECORE_EDGE_CONTEXT_ID```, ```NEXT_PUBLIC_DEFAULT_SITE_NAME```, ```NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID```, ```SITECORE_EDITING_SECRET```. (More info: [Environment variables in XM Cloud](https://doc.sitecore.com/xmc/en/developers/xm-cloud/get-the-environment-variables-for-a-site.html))
+5. Edit ```.env.local``` and provide a value for ```SITECORE_EDGE_CONTEXT_ID```, ```NEXT_PUBLIC_DEFAULT_SITE_NAME```, ```NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID```, ```SITECORE_EDITING_SECRET```. (More info: [Environment variables in XM Cloud](https://doc.sitecore.com/xmc/en/developers/xm-cloud/get-the-environment-variables-for-a-site.html)) Optionally set ```NEXT_PUBLIC_SITE_URL``` or ```NEXT_PUBLIC_BASE_URL``` to your public site origin when server-rendered code must build absolute URLs without the request ```Host``` header (see ```.env.remote.example```).
 
 6. Install dependencies:
    from ```kit-nextjs-skate-park``` run ```npm install```

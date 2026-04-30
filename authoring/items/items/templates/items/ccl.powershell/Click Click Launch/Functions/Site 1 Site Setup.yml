@@ -195,6 +195,7 @@ SharedFields:
             $item."metadataTitle" = $title
             $item."metadataDescription" = $description
             $item."metadataKeywords" = "Solterra & Co., wellness, editorial, lifestyle"
+            $item."metadataAuthor" = "Sitecore"
             $item."ogTitle" = $title
             $item."ogDescription" = $description
             $item."ogImage" = "<image mediaid=`"{B229B500-1CAB-40E4-9989-496FDEE77286}`" />"

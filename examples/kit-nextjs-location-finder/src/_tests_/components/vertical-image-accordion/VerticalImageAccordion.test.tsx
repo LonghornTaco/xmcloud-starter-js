@@ -5,8 +5,8 @@ import { Default as VerticalImageAccordion } from '@/components/vertical-image-a
 import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock framer-motion components
-jest.mock('framer-motion', () => ({
-  motion: {
+jest.mock('framer-motion', () => {
+  const motion = {
     div: ({
       children,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -24,9 +24,9 @@ jest.mock('framer-motion', () => ({
       exit?: unknown;
       transition?: unknown;
     }>) => <div {...props}>{children}</div>,
-  },
-  AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
-}));
+  };
+  return { motion, m: motion, AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</> };
+});
 
 // Mock ImageWrapper component
 jest.mock('@/components/image/ImageWrapper.dev', () => ({

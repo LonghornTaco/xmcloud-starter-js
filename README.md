@@ -25,7 +25,7 @@ This repository contains multiple Next.js Starter Kits, and the SPA Starters mon
 Here's a quick overview of the major folders and their purpose:
 
   - `/examples`:
-  Contains starter front-end applications. Each subfolder is a working app
+  Contains starter front-end applications. Each subfolder is a working app. Each starter is independent and self-contained
     * basic-nextjs: [README](https://github.com/Sitecore/xmcloud-starter-js/tree/main/examples/basic-nextjs/README.md)
     * basic-spa: [README](https://github.com/Sitecore/xmcloud-starter-js/tree/main/examples/basic-spa/README.md)
     * kit-nextjs-article-starter: [README](https://github.com/Sitecore/xmcloud-starter-js/tree/main/examples/kit-nextjs-article-starter/README.md)
@@ -70,7 +70,7 @@ Use the **path for your chosen starter** (e.g. `examples/kit-nextjs-article-star
    Log into the [Sitecore XM Cloud Deploy Portal](https://portal.sitecorecloud.io), open your Environment → **Developer Settings**. Ensure **Preview** is enabled, then copy the sample `.env` contents from **Local Development**.
 
 2. **Create `.env.local`**  
-   In your starter folder (e.g. `examples/kit-nextjs-article-starter`), copy `.env.remote.example` to `.env.local` and paste the contents. Set at least: `SITECORE_EDGE_CONTEXT_ID`, `NEXT_PUBLIC_DEFAULT_SITE_NAME`, `NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID`, `SITECORE_EDITING_SECRET`. See [Environment variables in XM Cloud](https://doc.sitecore.com/xmc/en/developers/xm-cloud/get-the-environment-variables-for-a-site.html).
+   In your starter folder (e.g. `examples/kit-nextjs-article-starter`), copy `.env.remote.example` to `.env.local` and paste the contents. Set at least: `SITECORE_EDGE_CONTEXT_ID`, `NEXT_PUBLIC_DEFAULT_SITE_NAME`, `NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID`, `SITECORE_EDITING_SECRET`. See [Environment variables in XM Cloud](https://doc.sitecore.com/xmc/en/developers/xm-cloud/get-the-environment-variables-for-a-site.html). Optionally set `NEXT_PUBLIC_SITE_URL` or `NEXT_PUBLIC_BASE_URL` to your public site origin when server-rendered code must build absolute URLs without relying on the request `Host` header (see comments in `.env.remote.example`).
 
 3. **Install and run**
    ```bash
@@ -192,6 +192,8 @@ For testing and validation, see the [GEO Compliance Checklist](docs/GEO_COMPLIAN
 
 This repository includes comprehensive AI guidance files to help maintain consistent code quality and follow Sitecore XM Cloud best practices across all starter applications:
 
+- **Skills: Capability Map** ([docs/Skills.md](docs/Skills.md)) - High-level capability groupings for the starter kits; helps AI tools and developers understand what the starters support and when to use each area
+- [**Agents.md**](Agents.md) - AI agent guidance: structure, commands, DOs/DON'Ts, boundaries, and quick reference
 - **Claude Code Guide** (`CLAUDE.md`) - Comprehensive guide for Claude Code and AI assistants with project architecture, coding standards, and best practices
 - **Cursor AI Rules** (`.cursor/rules/`) - Automatically provide context and enforce patterns when using Cursor AI
 - **Windsurf IDE Rules** (`.windsurfrules`) - Comprehensive coding standards, folder structure, and best practices for Windsurf's agentic IDE workflows

@@ -150,6 +150,7 @@ export const defaultProps = {
   fields: { item1: mockNavigationFields } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
+  page: mockPageData.page,
 };
 
 export const propsWithChildren = {
@@ -157,6 +158,7 @@ export const propsWithChildren = {
   fields: { item1: mockNavigationFieldsWithChildren } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
+  page: mockPageData.page,
 };
 
 export const propsWithoutStyles = {
@@ -164,6 +166,7 @@ export const propsWithoutStyles = {
   fields: { item1: mockNavigationFields } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
+  page: mockPageData.page,
 };
 
 export const propsWithoutId = {
@@ -171,6 +174,7 @@ export const propsWithoutId = {
   fields: { item1: mockNavigationFields } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
+  page: mockPageData.page,
 };
 
 export const propsWithoutTitle = {
@@ -178,6 +182,7 @@ export const propsWithoutTitle = {
   fields: { item1: mockNavigationFieldsWithoutTitle } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
+  page: mockPageData.page,
 };
 
 export const propsEmpty = {
@@ -185,4 +190,5 @@ export const propsEmpty = {
   fields: {} as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
+  page: mockPageData.page,
 };

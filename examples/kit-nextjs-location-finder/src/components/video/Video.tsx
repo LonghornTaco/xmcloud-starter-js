@@ -19,7 +19,7 @@ import { Default as Icon } from '@/components/icon/Icon';
 import { Default as ImageWrapper } from '../image/ImageWrapper.dev';
 import { m } from 'framer-motion';
 import { isMobile } from '@/utils/isMobile';
-import { extractVideoId } from '@/utils/video';
+import { extractVideoId, isYouTubeThumbnailImageUrl } from '@/utils/video';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 import { cn, getYouTubeThumbnail } from '@/lib/utils';
 import { Page } from '@sitecore-content-sdk/nextjs';
@@ -128,7 +128,7 @@ export function VideoBase({
                     alt=""
                     fill
                     className="object-cover"
-                    unoptimized={fallbackImage?.includes('youtube.com') || fallbackImage?.includes('ytimg.com')}
+                    unoptimized={isYouTubeThumbnailImageUrl(fallbackImage)}
                   />
                 </div>
               )}

@@ -11,7 +11,6 @@ export default function StructuredData({ id, data }: StructuredDataProps): JSX.E
     <script
       id={id}
       type="application/ld+json"
-      // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: toJsonLdString(data) }}
     />
   );

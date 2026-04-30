@@ -116,6 +116,7 @@ test('GET /.well-known/ai.txt returns 200 and valid JSON',async()=> {
     expect(resp.data.includes(`AI-Endpoint: ${BASE_URL}/ai/summary.json`)).toBe(true);
     expect(resp.data.includes(`AI-Endpoint: ${BASE_URL}/ai/faq.json`)).toBe(true);
     expect(resp.data.includes(`AI-Endpoint: ${BASE_URL}/ai/service.json`)).toBe(true);
+    expect(resp.data.includes(`AI-Endpoint: ${BASE_URL}/ai/markdown`)).toBe(true);
     expect(resp.data.includes(`Sitemap: ${BASE_URL}/sitemap-llm.xml`)).toBe(true);
     expect(resp.data.includes(`Sitemap: ${BASE_URL}/sitemap.xml`)).toBe(true);
     expect(resp.data.includes(`Last-Modified: ${new Date().toISOString().split('T')[0]}`)).toBe(true);  
@@ -234,4 +235,32 @@ test('GET /sitemap.xml returns 200 and valid XML', async () => {
     ];
     const expectedUrls = requiredPaths.map((p) => (p === '/' ? `${derivedOrigin}/` : join(derivedOrigin, p)));
     expect(locs).toEqual(expect.arrayContaining(expectedUrls));
+}, 15000);
+
+test('GET /ai/markdown returns 200 and valid markdown (home page)', async () => {
+    const resp = await axios.get(`${BASE_URL}/ai/markdown`, {
+        validateStatus: () => true,
+        timeout: 10000,
+    });
+    expect(resp.status).toBe(200);
+    const ct = (resp.headers['content-type'] || '').toLowerCase();
+    expect(ct).toContain('text/markdown');
+    expect(typeof resp.data).toBe('string');
+    expect(resp.data.length).toBeGreaterThan(0);
+    expect(resp.data).toContain('#');
+    expect(resp.data).not.toContain('<div');
+}, 15000);
+
+test('GET /ai/markdown/About returns 200 and valid markdown', async () => {
+    const resp = await axios.get(`${BASE_URL}/ai/markdown/About`, {
+        validateStatus: () => true,
+        timeout: 10000,
+    });
+    expect(resp.status).toBe(200);
+    const ct = (resp.headers['content-type'] || '').toLowerCase();
+    expect(ct).toContain('text/markdown');
+    expect(typeof resp.data).toBe('string');
+    expect(resp.data.length).toBeGreaterThan(0);
+    expect(resp.data).toContain('#');
+    expect(resp.data).not.toContain('<div');
 }, 15000);

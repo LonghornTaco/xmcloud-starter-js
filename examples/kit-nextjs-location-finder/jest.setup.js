@@ -587,6 +587,8 @@ jest.mock('@/lib/utils', () => ({
       .filter(Boolean)
       .join(' ');
   },
+  getBaseUrl: () => 'https://test.example.com',
+  getFullUrl: (path, host) => `https://test.example.com${path || ''}`,
 }));
 
 // Mock class-variance-authority
@@ -657,18 +659,37 @@ jest.mock('@/hooks/useIntersectionObserver', () => ({
 // ---------------------------
 //  Mock External Libraries
 // ---------------------------
-// Mock framer-motion
-jest.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, initial, animate, exit, transition, custom, variants, className, ...props }) => 
-      React.createElement('div', { className, ...props }, children),
-    span: ({ children, className, ...props }) => 
-      React.createElement('span', { className, ...props }, children),
-    button: ({ children, className, ...props }) => 
-      React.createElement('button', { className, ...props }, children),
-  },
-  AnimatePresence: ({ children }) => React.createElement(React.Fragment, {}, children),
-}));
+// Mock framer-motion (m is alias for motion; support any HTML element type)
+jest.mock('framer-motion', () => {
+  const createMotionComponent = (tag) =>
+    ({ children, initial, animate, exit, transition, custom, variants, style, ...props }) =>
+      React.createElement(tag, { ...props, style }, children);
+  const motion = new Proxy(
+    {
+      div: createMotionComponent('div'),
+      span: createMotionComponent('span'),
+      button: createMotionComponent('button'),
+      header: createMotionComponent('header'),
+      section: createMotionComponent('section'),
+      a: createMotionComponent('a'),
+    },
+    {
+      get(target, prop) {
+        return target[prop] || createMotionComponent(prop);
+      },
+    }
+  );
+  return {
+    motion,
+    m: motion,
+    AnimatePresence: ({ children }) => React.createElement(React.Fragment, {}, children),
+    useMotionValue: (initial) => ({ get: () => initial, set: jest.fn() }),
+    useSpring: (value) => value,
+    useTransform: () => ({ get: () => 0 }),
+    LazyMotion: ({ children }) => React.createElement(React.Fragment, {}, children),
+    domAnimation: {},
+  };
+});
 
 // Mock react-hook-form
 jest.mock('react-hook-form', () => ({

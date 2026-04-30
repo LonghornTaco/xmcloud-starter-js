@@ -16,6 +16,27 @@ import { extractVideoId } from '@/utils/video';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 import { cn, getYouTubeThumbnail } from '@/lib/utils';
 import Image from 'next/image';
+
+const isAllowedYouTubeImageHost = (url?: string): boolean => {
+  if (!url) {
+    return false;
+  }
+
+  try {
+    const parsedUrl = new URL(url, 'http://localhost');
+    const hostname = parsedUrl.hostname.toLowerCase();
+
+    return (
+      hostname === 'youtube.com' ||
+      hostname.endsWith('.youtube.com') ||
+      hostname === 'ytimg.com' ||
+      hostname.endsWith('.ytimg.com')
+    );
+  } catch {
+    return false;
+  }
+};
+
 export function VideoBase({
   fields,
   params,
@@ -122,9 +143,7 @@ export function VideoBase({
                     aria-hidden="true"
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover"
-                    unoptimized={
-                      fallbackImage?.includes('youtube.com') || fallbackImage?.includes('ytimg.com')
-                    }
+                    unoptimized={isAllowedYouTubeImageHost(fallbackImage)}
                   />
                 </div>
               )}

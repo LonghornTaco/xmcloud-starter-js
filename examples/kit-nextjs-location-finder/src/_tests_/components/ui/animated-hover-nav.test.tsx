@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react';
 import { AnimatedHoverNav } from '@/components/ui/animated-hover-nav';
 
 // Mock framer-motion
-jest.mock('framer-motion', () => ({
-  motion: {
+jest.mock('framer-motion', () => {
+  const motion = {
     div: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
       <div {...props}>{children as React.ReactNode}</div>
     ),
@@ -14,12 +14,16 @@ jest.mock('framer-motion', () => ({
     p: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
       <p {...props}>{children as React.ReactNode}</p>
     ),
-  },
-  AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
-  useMotionValue: () => ({ get: () => 0, set: jest.fn() }),
-  useSpring: () => ({ get: () => 0 }),
-  useTransform: () => ({ get: () => 0 }),
-}));
+  };
+  return {
+    motion,
+    m: motion,
+    AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
+    useMotionValue: () => ({ get: () => 0, set: jest.fn() }),
+    useSpring: () => ({ get: () => 0 }),
+    useTransform: () => ({ get: () => 0 }),
+  };
+});
 
 // Mock next/link
 jest.mock('next/link', () => {

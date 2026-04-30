@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { SiteResolver } from '@sitecore-content-sdk/core/site';
-import type { SitemapXmlOptions } from '@sitecore-content-sdk/core/client';
+import { SiteResolver } from '@sitecore-content-sdk/content/site';
+import type { SitemapXmlOptions } from '@sitecore-content-sdk/content/client';
 import type { SiteInfo } from '@sitecore-content-sdk/nextjs';
 import scClient from 'lib/sitecore-client';
 import sites from '.sitecore/sites.json';
@@ -35,9 +35,9 @@ function escapeXml(text: string): string {
 }
 
 function getSitemapOptions(req: NextApiRequest): SitemapXmlOptions {
-  const sitesNormalized: SiteInfo[] = (sites as { name: string; hostName?: string; language?: string }[]).map(
-    (s) => ({ name: s.name, hostName: s.hostName ?? '*', language: s.language ?? 'en' })
-  );
+  const sitesNormalized: SiteInfo[] = (
+    sites as { name: string; hostName?: string; language?: string }[]
+  ).map((s) => ({ name: s.name, hostName: s.hostName ?? '*', language: s.language ?? 'en' }));
   const siteResolver = new SiteResolver(sitesNormalized);
   const reqHost = (req.headers['x-forwarded-host'] as string) || req.headers.host || '';
   const forwardedProto = req.headers['x-forwarded-proto'];
@@ -55,7 +55,9 @@ function getSitemapOptions(req: NextApiRequest): SitemapXmlOptions {
 }
 
 /** Parses <url> entries from sitemap XML. */
-function parseUrlEntriesFromXml(xml: string): { loc: string; lastmod?: string; changefreq?: string; priority?: string }[] {
+function parseUrlEntriesFromXml(
+  xml: string
+): { loc: string; lastmod?: string; changefreq?: string; priority?: string }[] {
   const urls: { loc: string; lastmod?: string; changefreq?: string; priority?: string }[] = [];
   for (const block of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
     const loc = block[1].match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -127,12 +129,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const pageEntries = urls
       .filter((u) => shouldIncludeUrl(u.loc))
-      .map((u) => `  <url>
+      .map(
+        (u) => `  <url>
     <loc>${escapeXml(u.loc)}</loc>
     <lastmod>${u.lastmod || today}</lastmod>
     <changefreq>${u.changefreq || 'weekly'}</changefreq>
     <priority>${u.priority || '0.5'}</priority>
-  </url>`);
+  </url>`
+      );
 
     const aiEndpoints = ['/ai/faq.json', '/ai/summary.json', '/ai/service.json'] as const;
     const aiEntries = aiEndpoints.map(
@@ -144,8 +148,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   </url>`
     );
 
-    const entries =
-      pageEntries.length > 0 ? [...pageEntries, ...aiEntries].join('\n') : '';
+    const entries = pageEntries.length > 0 ? [...pageEntries, ...aiEntries].join('\n') : '';
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -153,12 +156,17 @@ ${entries}
 </urlset>`;
 
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300, stale-while-revalidate=3600');
+    res.setHeader(
+      'Cache-Control',
+      'public, max-age=300, s-maxage=300, stale-while-revalidate=3600'
+    );
     res.status(200).send(xml);
   } catch {
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.status(200).send(
-      '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'
-    );
+    res
+      .status(200)
+      .send(
+        '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'
+      );
   }
 }

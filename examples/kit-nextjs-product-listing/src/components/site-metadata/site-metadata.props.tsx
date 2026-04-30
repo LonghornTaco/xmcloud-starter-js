@@ -10,6 +10,7 @@ export type SiteMetadataFields = {
   fields: {
     title?: Field<string>;
     metadataTitle?: Field<string>;
+    metadataAuthor?: Field<string>;
     metadataKeywords?: Field<string>;
     metadataDescription?: Field<string>;
   };

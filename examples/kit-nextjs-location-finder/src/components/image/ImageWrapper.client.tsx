@@ -6,7 +6,7 @@ import NextImage, { ImageProps } from 'next/image';
 import { ImageField, Image as ContentSdkImage, useSitecore } from '@sitecore-content-sdk/nextjs';
 import { ImageOptimizationContext } from '@/components/image/image-optimization.context';
 import placeholderImageLoader from '@/utils/placeholderImageLoader';
-import { IMAGE_REMOTE_PATTERNS } from '@/config/image-config';
+import { hostnameMatchesImageRemotePattern, IMAGE_REMOTE_PATTERNS } from '@/config/image-config';
 
 type Props = {
   image?: ImageField;
@@ -25,18 +25,11 @@ const shouldOptimize = (src: string): boolean => {
   try {
     const url = new URL(src);
 
-    const convertToRegex = (pattern: string) => {
-      // Escape all regex metacharacters, then convert glob-style '*' to '.*'
-      const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      return escapeRegex(pattern).replace(/\\\*/g, '.*');
-    };
-
     return IMAGE_REMOTE_PATTERNS.some((pattern) => {
       const protocolMatch = !pattern.protocol || pattern.protocol === url.protocol.slice(0, -1);
       if (!protocolMatch) return false;
 
-      const hostnameRegex = new RegExp('^' + convertToRegex(pattern.hostname) + '$');
-      return hostnameRegex.test(url.hostname);
+      return hostnameMatchesImageRemotePattern(url.hostname, pattern.hostname);
     });
   } catch {
     return false;

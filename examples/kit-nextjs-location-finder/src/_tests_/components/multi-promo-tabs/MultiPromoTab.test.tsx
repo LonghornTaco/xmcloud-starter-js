@@ -30,8 +30,8 @@ jest.mock('@/components/image/ImageWrapper.dev', () => ({
   )),
 }));
 
-jest.mock('framer-motion', () => ({
-  motion: {
+jest.mock('framer-motion', () => {
+  const motion = {
     div: ({
       children,
       className,
@@ -47,8 +47,9 @@ jest.mock('framer-motion', () => ({
         {children}
       </div>
     ),
-  },
-}));
+  };
+  return { motion, m: motion, AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</> };
+});
 
 describe('MultiPromoTab', () => {
   it('renders two promo items with images and links', () => {

@@ -83,36 +83,34 @@ jest.mock('@/components/ui/animated-hover-nav', () => ({
 
 jest.mock('framer-motion', () => {
   const actual = jest.requireActual('react');
-  return {
-    motion: {
-      header: actual.forwardRef(
-        (
-          { children, className }: { children: React.ReactNode; className?: string },
-          ref: React.Ref<HTMLElement>
-        ) => (
-          <header ref={ref} className={className}>
-            {children}
-          </header>
-        )
-      ),
-      div: actual.forwardRef(
-        (
-          { children, className, onClick }: Record<string, unknown>,
-          ref: React.Ref<HTMLDivElement>
-        ) => (
-          <div
-            ref={ref}
-            className={className as string}
-            onClick={onClick as React.MouseEventHandler<HTMLDivElement>}
-          >
-            {children as React.ReactNode}
-          </div>
-        )
-      ),
-      nav: ({ children }: { children: React.ReactNode }) => <nav>{children}</nav>,
-    },
-    AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  const motion = {
+    header: actual.forwardRef(
+      (
+        { children, className }: { children: React.ReactNode; className?: string },
+        ref: React.Ref<HTMLElement>
+      ) => (
+        <header ref={ref} className={className}>
+          {children}
+        </header>
+      )
+    ),
+    div: actual.forwardRef(
+      (
+        { children, className, onClick }: Record<string, unknown>,
+        ref: React.Ref<HTMLDivElement>
+      ) => (
+        <div
+          ref={ref}
+          className={className as string}
+          onClick={onClick as React.MouseEventHandler<HTMLDivElement>}
+        >
+          {children as React.ReactNode}
+        </div>
+      )
+    ),
+    nav: ({ children }: { children: React.ReactNode }) => <nav>{children}</nav>,
   };
+  return { motion, m: motion, AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</> };
 });
 
 jest.mock('lucide-react', () => ({

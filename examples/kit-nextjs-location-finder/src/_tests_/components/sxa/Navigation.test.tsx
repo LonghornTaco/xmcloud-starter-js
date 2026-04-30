@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- test file mocks console to suppress output */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';

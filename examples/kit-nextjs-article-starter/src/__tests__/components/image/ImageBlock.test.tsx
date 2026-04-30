@@ -111,12 +111,12 @@ describe('ImageBlock Component', () => {
       expect(img).toHaveAttribute('height', '600');
     });
 
-    it('should render caption in paragraph tag', () => {
+    it('should render caption in figcaption tag', () => {
       const { container } = render(<ImageBlock {...defaultProps} />);
 
-      const paragraph = container.querySelector('p');
-      expect(paragraph).toBeInTheDocument();
-      expect(paragraph).toHaveTextContent('This is a beautiful image caption');
+      const figcaption = container.querySelector('figcaption');
+      expect(figcaption).toBeInTheDocument();
+      expect(figcaption).toHaveTextContent('This is a beautiful image caption');
     });
   });
 
@@ -132,9 +132,9 @@ describe('ImageBlock Component', () => {
       const { container } = render(<ImageBlock {...propsWithEmptyCaption} />);
 
       expect(screen.getByTestId('image-wrapper')).toBeInTheDocument();
-      const paragraph = container.querySelector('p');
-      expect(paragraph).toBeInTheDocument();
-      expect(paragraph).toHaveTextContent('');
+      const figcaption = container.querySelector('figcaption');
+      expect(figcaption).toBeInTheDocument();
+      expect(figcaption).toHaveTextContent('');
     });
 
     it('should render image without alt text', () => {

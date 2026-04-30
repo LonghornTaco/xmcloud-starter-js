@@ -21,11 +21,12 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@sitecore-cloudsdk/core": "^0.5.4",
-    "@sitecore-cloudsdk/events": "^0.5.4",
-    "@sitecore-content-sdk/nextjs": "^1.0.0",
-    "next": "^15.5.10",
-    "next-intl": "^4.3.5",
+    "@sitecore-content-sdk/analytics-core": "^2.0.0",
+    "@sitecore-content-sdk/events": "^2.0.0",
+    "@sitecore-content-sdk/nextjs": "^2.0.0",
+    "@sitecore-content-sdk/personalize": "^2.0.0",
+    "next": "^16.1.1",
+    "next-intl": "^4.9.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "rsc-env": "0.0.2",
@@ -33,25 +34,37 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@sitecore-content-sdk/cli": "^1.0.0",
+    "@sitecore-content-sdk/cli": "^2.0.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.15.14",
+    "@types/node": "^24.10.4",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "axios": "^1.13.6",
     "cross-env": "^10.0.0",
     "eslint": "^9.33.0",
-    "eslint-config-next": "15.5.0",
-    "fast-xml-parser": "^5.4.2",
+    "fast-xml-parser": "^5.5.9",
+    "eslint-config-next": "16.1.1",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "npm-run-all2": "^8.0.4",
     "tailwindcss": "^4",
     "typescript": "~5.8.3"
+  },
+  "overrides": {
+    "picomatch": "4.0.4",
+    "anymatch": {
+      "picomatch": "2.3.2"
+    },
+    "micromatch": {
+      "picomatch": "2.3.2"
+    },
+    "brace-expansion@^5.0.0": "5.0.5",
+    "lodash-es": "4.18.1",
+    "flatted": "3.4.2"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production npm-run-all --serial sitecore-tools:generate-map sitecore-tools:build next:build",
@@ -68,10 +81,11 @@
     "start": "cross-env-shell NODE_ENV=production npm-run-all --serial build next:start",
     "test": "jest",
     "test:unit": "jest --testPathIgnorePatterns=geo",
-    "test:geo": "jest --testPathPatterns=geo",
+    "test:geo": "jest --testPathPatterns=geo --coverage=false",
     "test:watch": "jest --watch",
     "test:unit:watch": "jest --watch --testPathIgnorePatterns=geo",
-    "test:geo:watch": "jest --watch --testPathPatterns=geo",
+    "test:coverage:unit": "jest --coverage --testPathIgnorePatterns=geo",
+    "test:geo:watch": "jest --watch --testPathPatterns=geo --coverage=false",
     "test:coverage": "jest --coverage"
   }
 }

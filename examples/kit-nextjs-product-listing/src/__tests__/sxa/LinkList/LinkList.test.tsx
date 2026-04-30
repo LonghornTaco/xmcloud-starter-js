@@ -112,7 +112,7 @@ describe('LinkList Component', () => {
 
       expect(container.querySelector('[data-class-change]')).toBeInTheDocument();
       expect(container.querySelector('h3')).toBeInTheDocument();
-      expect(container.querySelector('ul[role="listbox"]')).toBeInTheDocument();
+      expect(container.querySelector('ul[aria-label="Navigation options"]')).toBeInTheDocument();
       expect(screen.getByText('Navigation Links')).toBeInTheDocument();
     });
 
@@ -144,7 +144,7 @@ describe('LinkList Component', () => {
       const { container } = render(<LinkListDefault {...linkListPropsEmptyTitle} />);
 
       expect(container.querySelector('h3')).toBeInTheDocument();
-      expect(container.querySelector('ul[role="listbox"]')).toBeInTheDocument();
+      expect(container.querySelector('ul[aria-label="Navigation options"]')).toBeInTheDocument();
     });
 
     it('should handle no links gracefully', () => {
@@ -177,7 +177,7 @@ describe('LinkList Component', () => {
 
       expect(container.querySelector('.sticky')).toBeInTheDocument();
       expect(container.querySelector('.shadow-lg')).toBeInTheDocument();
-      expect(container.querySelector('ul[role="listbox"]')).toBeInTheDocument();
+      expect(container.querySelector('ul[aria-label="Navigation options"]')).toBeInTheDocument();
     });
 
     it('should render anchor links', () => {
@@ -250,7 +250,7 @@ describe('LinkList Component', () => {
     it('should render header secondary links with title', () => {
       const { container } = render(<HeaderSecondaryLinks {...defaultLinkListProps} />);
 
-      expect(container.querySelector('h5')).toBeInTheDocument();
+      expect(container.querySelector('h2')).toBeInTheDocument();
       expect(container.querySelector('ul')).toBeInTheDocument();
       expect(screen.getByText('Navigation Links')).toBeInTheDocument();
     });
@@ -269,9 +269,9 @@ describe('LinkList Component', () => {
     it('should have proper ARIA labels', () => {
       render(<LinkListDefault {...defaultLinkListProps} />);
 
-      const listbox = screen.getByRole('listbox');
-      expect(listbox).toBeInTheDocument();
-      expect(listbox).toHaveAttribute('aria-label', 'Navigation options');
+      const list = screen.getByRole('list', { name: 'Navigation options' });
+      expect(list).toBeInTheDocument();
+      expect(list).toHaveAttribute('aria-label', 'Navigation options');
     });
 
     it('should have semantic HTML structure', () => {

@@ -61,7 +61,7 @@ Languages:
     - ID: "112118a1-8e2b-4697-aabf-794f3c738861"
       Hint: WarrantyLink
       Value: |
-        <link linktype="external" url="#" target="" text="Returns and Warranty" title="" class=""/>
+        <link linktype="external" url="/" target="" text="Returns and Warranty" title="" class=""/>
     - ID: "161dd364-3753-468f-8801-e6224ec7bbff"
       Hint: Price
       Value: $1290.99 USD
@@ -98,7 +98,7 @@ Languages:
     - ID: "b041d971-f2fd-4514-95b8-7fc8a90cd41f"
       Hint: ShippingLink
       Value: |
-        <link linktype="external" url="#" text="Shipping Options"/>
+        <link linktype="external" url="/" text="Shipping Options"/>
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |

@@ -26,8 +26,8 @@ const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
   Link: ({ field, children, onClick, editable }: MockLinkProps) => (
-    <a 
-      href={field?.value?.href as string | undefined || '#'} 
+    <a
+      href={(field?.value as { href?: string })?.href || '#'}
       onClick={onClick}
       data-editable={editable?.toString()}
       data-testid="nav-link"
@@ -35,6 +35,8 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       {children}
     </a>
   ),
+  Text: ({ field }: { field?: { value?: string } }) =>
+    field?.value != null ? <span>{field.value}</span> : null,
 }));
 
 describe('Navigation Component', () => {
@@ -118,10 +120,10 @@ describe('Navigation Component', () => {
     });
 
     it('should prevent default when in editing mode', () => {
-      mockUseSitecore.mockReturnValue(mockPageDataEditing);
+      const propsEditing = { ...defaultProps, page: mockPageDataEditing.page };
       const mockPreventDefault = jest.fn();
-      
-      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
+
+      render(<Navigation {...(propsEditing as unknown as Parameters<typeof Navigation>[0])} />);
 
       const checkbox = screen.getByRole('checkbox');
       fireEvent.click(checkbox, { preventDefault: mockPreventDefault });
@@ -265,17 +267,14 @@ describe('Navigation Component', () => {
 
   describe('Editing mode', () => {
     it('should render with editable links in editing mode', () => {
-      mockUseSitecore.mockReturnValue(mockPageDataEditing);
-      
-      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
+      const propsEditing = { ...defaultProps, page: mockPageDataEditing.page };
+      render(<Navigation {...(propsEditing as unknown as Parameters<typeof Navigation>[0])} />);
 
       const link = screen.getByTestId('nav-link');
       expect(link).toHaveAttribute('data-editable', 'true');
     });
 
     it('should render without editable links in normal mode', () => {
-      mockUseSitecore.mockReturnValue(mockPageData);
-      
       render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const link = screen.getByTestId('nav-link');
@@ -290,6 +289,7 @@ describe('Navigation Component', () => {
         fields: defaultProps.fields,
         handleClick: defaultProps.handleClick,
         relativeLevel: defaultProps.relativeLevel,
+        page: defaultProps.page,
       };
 
       render(<Navigation {...(propsWithoutParams as unknown as Parameters<typeof Navigation>[0])} />);

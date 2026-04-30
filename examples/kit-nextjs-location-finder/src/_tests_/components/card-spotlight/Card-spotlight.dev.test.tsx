@@ -4,20 +4,21 @@ import '@testing-library/jest-dom';
 import { CardSpotlight } from '@/components/card-spotlight/card-spotlight.dev';
 
 // Mock framer-motion/motion
-jest.mock('motion/react', () => ({
-  useMotionValue: jest.fn(() => ({
-    set: jest.fn(),
-    get: jest.fn(() => 0),
-  })),
-  useMotionTemplate: jest.fn(() => 'mocked-gradient'),
-  motion: {
+jest.mock('motion/react', () => {
+  const motion = {
     div: ({ children, style, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
       <div {...props} style={style as React.CSSProperties}>
         {children}
       </div>
     ),
-  },
-}));
+  };
+  return {
+    useMotionValue: jest.fn(() => ({ set: jest.fn(), get: jest.fn(() => 0) })),
+    useMotionTemplate: jest.fn(() => 'mocked-gradient'),
+    motion,
+    m: motion,
+  };
+});
 
 // Mock cn utility
 jest.mock('@/lib/utils', () => ({

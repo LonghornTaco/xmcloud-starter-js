@@ -47,7 +47,9 @@ export const Default: React.FC<SubscriptionBannerProps> = ({ fields }) => {
     mode: 'onTouched',
   });
 
-  const onSubmit = async (_data: FormValues) => {
+  const onSubmit = async (
+    _data: FormValues, // eslint-disable-line @typescript-eslint/no-unused-vars -- required by react-hook-form signature
+  ) => {
     // Handle form submission
     setIsSubmitted(true);
     // Reset the form to clear the input, then set the thank you message

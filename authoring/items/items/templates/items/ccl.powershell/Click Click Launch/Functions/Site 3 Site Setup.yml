@@ -213,6 +213,7 @@ SharedFields:
             $item."metadataTitle" = $title
             $item."metadataDescription" = $description
             $item."metadataKeywords" = "SYNC, audio equipment, speakers, headphones, premium sound, audiophile"
+            $item."metadataAuthor" = "Sitecore"
             $item."ogTitle" = $title
             $item."ogDescription" = $description
             $item."ogImage" = "<image mediaid=`"{5977A6A5-D5D4-45BD-ADD5-0E7E629162FD}`" />"
