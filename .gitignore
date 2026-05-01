@@ -52,3 +52,7 @@ packages/
 
 # Claude Code local settings
 .claude/
+
+# Personal backlog (not team-shared)
+backlog.md
+backlog-archive.md
