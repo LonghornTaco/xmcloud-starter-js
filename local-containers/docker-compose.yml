@@ -1,13 +1,32 @@
+# Linux-only local development stack for the XM Cloud starter kits.
+#
+# Services:
+#   - traefik       Reverse proxy / TLS termination on :443.
+#   - mockingbird   YAML-backed Sitecore CM shim that serves a GraphQL
+#                   Layout Service from this repo's SCS-serialized YAML.
+#                   Drop-in replacement for Experience Edge in local dev,
+#                   with a Web UI for editing items, templates, and renderings.
+#   - rendering     Next.js dev container that mounts one of the
+#                   examples/<starter> directories. Configurable via
+#                   STARTER_PATH in .env.
+#   - hostswriter   Writes container hostnames to the Windows host's
+#                   hosts file (Docker Desktop only) so devs can hit
+#                   https://nextjs.xmc-starter-js.localhost from a browser.
+#
+# This stack is Linux-only. The previous Windows-based CM/MSSQL/Solr stack
+# has been removed; for local headless dev with a real CM, use a remote
+# XM Cloud environment.
+
 services:
   traefik:
-    isolation: ${TRAEFIK_ISOLATION}
     image: ${TRAEFIK_IMAGE}
+    container_name: ${COMPOSE_PROJECT_NAME}-traefik
     command:
       - "--ping"
       - "--api.insecure=true"
-      - "--providers.docker.endpoint=npipe:////./pipe/docker_engine"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.exposedByDefault=false"
-      - "--providers.file.directory=C:/etc/traefik/config/dynamic"
+      - "--providers.file.directory=/etc/traefik/config/dynamic"
       - "--entryPoints.websecure.address=:443"
       - "--entryPoints.websecure.forwardedHeaders.insecure"
     ports:
@@ -16,111 +35,101 @@ services:
     healthcheck:
       test: ["CMD", "traefik", "healthcheck", "--ping"]
     volumes:
-      - source: \\.\pipe\docker_engine\
-        target: \\.\pipe\docker_engine\
-        type: npipe
-      - ./traefik:C:/etc/traefik
-    depends_on:
-      cm:
-        condition: service_healthy
-  mssql:
-    isolation: ${ISOLATION}
-    image: ${SITECORE_NONPRODUCTION_DOCKER_REGISTRY}nonproduction/mssql-developer:2017-${EXTERNAL_IMAGE_TAG_SUFFIX}
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker/traefik:/etc/traefik
+
+  mockingbird:
+    image: ${MOCKINGBIRD_IMAGE}
+    container_name: ${COMPOSE_PROJECT_NAME}-mockingbird
     environment:
-      SA_PASSWORD: ${SQL_SA_PASSWORD}
-      SITECORE_ADMIN_PASSWORD: ${SITECORE_ADMIN_PASSWORD}
-      ACCEPT_EULA: "Y"
-    ports:
-      - "14330:1433"
+      PORT: ${MOCKINGBIRD_PORT}
+      HOST: 0.0.0.0
+      # CDN / Edge base URL prefix for media src attributes.
+      MEDIA_BASE_URL: ${MOCKINGBIRD_MEDIA_BASE_URL}
+      INDEX_CACHE_PATH: /app/data/cache/index.json.gz
+      # Per-request site routing: ?site=<name> > Host: header > null.
+      # No env pin needed: the SDK's multisite proxy passes ?site=, and
+      # mockingbird derives the site list from Site Grouping items in
+      # the corpus at boot via siteInfoCollection.
     volumes:
-      - type: bind
-        source: .\mssql-data
-        target: c:\data
-  mssql-init:
-    isolation: ${ISOLATION}
-    image: ${SITECORE_DOCKER_REGISTRY}sitecore-xmcloud-mssql-init:${SITECORE_VERSION}
-    environment:
-      SQL_SERVER: ${SQL_SERVER}
-      SQL_ADMIN_LOGIN: ${SQL_SA_LOGIN}
-      SQL_ADMIN_PASSWORD: ${SQL_SA_PASSWORD}
-      SQL_DATABASE_PREFIX: ${SQL_DATABASE_PREFIX}
-      SITECORE_ADMIN_PASSWORD: ${SITECORE_ADMIN_PASSWORD}
-      POST_DEPLOYMENT_WAIT_PERIOD: 300
-    healthcheck:
-      test: ["CMD", "powershell", "-command", "if ([System.Environment]::GetEnvironmentVariable('DatabasesDeploymentStatus', 'Machine') -eq 'Complete') { exit 0 } else { exit 1}"]
-      start_period: 300s
-      interval: 5s
-    depends_on:
-      mssql:
-        condition: service_healthy
-  solr:
-    isolation: ${ISOLATION}
-    image: ${SITECORE_NONPRODUCTION_DOCKER_REGISTRY}nonproduction/solr:8.11.2-${EXTERNAL_IMAGE_TAG_SUFFIX}
-    ports:
-      - "8984:8983"
-    volumes:
-      - type: bind
-        source: .\solr-data
-        target: c:\data
-    environment:
-      SOLR_MODE: solrcloud
-    healthcheck:
-      test: ["CMD", "powershell", "-command", "try { $$statusCode = (iwr http://solr:8983/solr/admin/cores?action=STATUS -UseBasicParsing).StatusCode; if ($$statusCode -eq 200) { exit 0 } else { exit 1} } catch { exit 1 }"]
-  solr-init:
-    isolation: ${ISOLATION}
-    image: ${SITECORE_DOCKER_REGISTRY}sitecore-xmcloud-solr-init:${SITECORE_VERSION}
-    environment:
-      SITECORE_SOLR_CONNECTION_STRING: http://solr:8983/solr
-      SOLR_CORE_PREFIX_NAME: ${SOLR_CORE_PREFIX_NAME}
-    depends_on:
-      solr:
-        condition: service_healthy
-  cm:
-    isolation: ${ISOLATION}
-    image: ${SITECORE_DOCKER_REGISTRY}sitecore-xmcloud-cm:${SITECORE_VERSION}
-    depends_on:
-      mssql:
-        condition: service_healthy
-      solr-init:
-        condition: service_started
-    environment:
-      host: ${CM_HOST}
-      RENDERING_HOST_INTERNAL_URI: ${RENDERING_HOST_INTERNAL_URI}
-      Sitecore_AppSettings_instanceNameMode:define: default
-      Sitecore_ConnectionStrings_Core: Data Source=${SQL_SERVER};Initial Catalog=${SQL_DATABASE_PREFIX}.Core;User ID=${SQL_SA_LOGIN};Password=${SQL_SA_PASSWORD}
-      Sitecore_ConnectionStrings_Security: Data Source=${SQL_SERVER};Initial Catalog=${SQL_DATABASE_PREFIX}.Core;User ID=${SQL_SA_LOGIN};Password=${SQL_SA_PASSWORD}
-      Sitecore_ConnectionStrings_Master: Data Source=${SQL_SERVER};Initial Catalog=${SQL_DATABASE_PREFIX}.Master;User ID=${SQL_SA_LOGIN};Password=${SQL_SA_PASSWORD}
-      Sitecore_ConnectionStrings_Web: Data Source=${SQL_SERVER};Initial Catalog=${SQL_DATABASE_PREFIX}.Web;User ID=${SQL_SA_LOGIN};Password=${SQL_SA_PASSWORD}
-      Sitecore_ConnectionStrings_Solr.Search: http://solr:8983/solr;solrCloud=true
-      Sitecore_ConnectionStrings_AzureBlob: ${AZUREBLOB_SAS}
-      AzureStorageContainerName: ${AZUREBLOB_CONTAINER}
-      AzureStorageDefaultProvider: ${AZUREBLOB_DEFAULT_PROVIDER}
-      Sitecore_ConnectionStrings_ExperienceEdge: ${EXPEDGE_CONNECTION}
-      Sitecore_AppSettings_Telerik.AsyncUpload.ConfigurationEncryptionKey: ${TELERIK_ENCRYPTION_KEY}
-      Sitecore_AppSettings_Telerik.Upload.ConfigurationHashKey: ${TELERIK_ENCRYPTION_KEY}
-      Sitecore_AppSettings_Telerik.Web.UI.DialogParametersEncryptionKey: ${TELERIK_ENCRYPTION_KEY}
-      # Sitecore_License: ${SITECORE_LICENSE}
-      SOLR_CORE_PREFIX_NAME: ${SOLR_CORE_PREFIX_NAME}
-      MEDIA_REQUEST_PROTECTION_SHARED_SECRET: ${MEDIA_REQUEST_PROTECTION_SHARED_SECRET}
-      LOG_LEVEL_VALUE: ${LOG_LEVEL_VALUE}
-      SITECORE_FedAuth_dot_Auth0_dot_IsLocal: ${SITECORE_FedAuth_dot_Auth0_dot_IsLocal}
-      SITECORE_XmCloud_dot_OrganizationId: ${SITECORE_XmCloud_dot_OrganizationId}
-      SITECORE_XmCloud_dot_TenantId: ${SITECORE_XmCloud_dot_TenantId}
-      SITECORE_FedAuth_dot_Auth0_dot_RedirectBaseUrl: ${SITECORE_FedAuth_dot_Auth0_dot_RedirectBaseUrl}
-      SITECORE_FedAuth_dot_Auth0_dot_ClientId: ${SITECORE_FedAuth_dot_Auth0_dot_ClientId}
-      SITECORE_FedAuth_dot_Auth0_dot_ClientSecret: ${SITECORE_FedAuth_dot_Auth0_dot_ClientSecret}
-      SITECORE_FedAuth_dot_Auth0_dot_Domain: ${SITECORE_FedAuth_dot_Auth0_dot_Domain}
-      SITECORE_FedAuth_dot_Auth0_dot_Audience: ${SITECORE_FedAuth_dot_Auth0_dot_Audience}
-      SITECORE_FedAuth_dot_Auth0_dot_LogoutRedirect: ${SITECORE_FedAuth_dot_Auth0_dot_LogoutRedirect}
-    healthcheck:
-      test: ["CMD", "powershell", "-command", "C:/Healthchecks/Healthcheck.ps1"]
-      timeout: 300s
+      # SCS root config - the same file `dotnet sitecore` reads.
+      - ${MOCKINGBIRD_SITECORE_JSON}:/app/data/sitecore.json
+      # Dev-authored templates, renderings, layouts, branch templates -
+      # committed to the repo.
+      - ${MOCKINGBIRD_SERIALIZATION_PATH}:/app/data/serialization
+      # Optional second SCS root for content-item YAMLs that aren't in the repo.
+      - ${MOCKINGBIRD_CONTENT_PATH}:/app/data/content
+      # Engine-internal parsed-item index cache. Safe to delete; rebuilds on boot.
+      - ${MOCKINGBIRD_CACHE_PATH}:/app/data/cache
+    networks:
+      default:
+        aliases:
+          - ${MOCKINGBIRD_HOST}
+          - mockingbird
     labels:
       - "traefik.enable=true"
-      - "traefik.http.middlewares.force-STS-Header.headers.forceSTSHeader=true"
-      - "traefik.http.middlewares.force-STS-Header.headers.stsSeconds=31536000"
-      - "traefik.http.routers.cm-secure.entrypoints=websecure"
-      - "traefik.http.routers.cm-secure.rule=Host(`${CM_HOST}`)"
-      - "traefik.http.routers.cm-secure.tls=true"
-      - "traefik.http.routers.cm-secure.middlewares=force-STS-Header"
-      - "traefik.http.services.cm.loadbalancer.server.port=80"
+      - "traefik.http.routers.mockingbird-secure.rule=Host(`${MOCKINGBIRD_HOST}`)"
+      - "traefik.http.routers.mockingbird-secure.entrypoints=websecure"
+      - "traefik.http.routers.mockingbird-secure.tls=true"
+      - "traefik.http.services.mockingbird.loadbalancer.server.port=${MOCKINGBIRD_PORT}"
+
+  rendering:
+    image: ${COMPOSE_PROJECT_NAME}-rendering:${VERSION:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME}-rendering
+    build:
+      context: ./docker/build/rendering-nextjs
+      target: ${BUILD_CONFIGURATION}
+      args:
+        PARENT_IMAGE: ${NODEJS_PARENT_IMAGE}
+    ports:
+      - "3000:3000"
+    # Named volume masks /app/node_modules so linux-native npm installs
+    # never touch the host's node_modules. First boot populates the empty
+    # node_modules volume; subsequent boots reuse it.
+    volumes:
+      - ${STARTER_PATH}:/app
+      - rendering-node-modules:/app/node_modules
+    environment:
+      # Server-side fetches hit mockingbird directly via docker DNS.
+      NEXT_PUBLIC_SITECORE_API_HOST: "http://mockingbird:${MOCKINGBIRD_PORT}"
+      NEXT_PUBLIC_SITECORE_API_KEY: ${SITECORE_API_KEY}
+      GRAPH_QL_ENDPOINT: "http://mockingbird:${MOCKINGBIRD_PORT}/api/graphql"
+      # Clear Edge Context so the SDK uses the local API host above.
+      SITECORE_EDGE_CONTEXT_ID: ""
+      NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID: ""
+      NEXT_PUBLIC_DEFAULT_SITE_NAME: ${NEXT_PUBLIC_DEFAULT_SITE_NAME}
+      NEXT_PUBLIC_DEFAULT_LANGUAGE: ${NEXT_PUBLIC_DEFAULT_LANGUAGE}
+      SITECORE_EDITING_SECRET: ${SITECORE_EDITING_SECRET}
+      PUBLIC_URL: "https://${RENDERING_HOST_NEXTJS}"
+      NEXTJS_DIST_DIR: ".next-container"
+      DISABLE_SSG_FETCH: ${DISABLE_SSG_FETCH}
+    networks:
+      default:
+        aliases:
+          - ${RENDERING_HOST_NEXTJS}
+    depends_on:
+      - mockingbird
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rendering-secure.rule=Host(`${RENDERING_HOST_NEXTJS}`)"
+      - "traefik.http.routers.rendering-secure.entrypoints=websecure"
+      - "traefik.http.routers.rendering-secure.tls=true"
+      - "traefik.http.services.rendering.loadbalancer.server.port=3000"
+
+  hostswriter:
+    image: ${WHW_IMAGE}
+    container_name: ${COMPOSE_PROJECT_NAME}-hostswriter
+    volumes:
+      # Linux whw binary defaults to /host-etc/hosts.
+      # Mount the Windows hosts dir via Docker Desktop path translation.
+      - C:/Windows/System32/drivers/etc:/host-etc
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # Docker-internal IPs are unreachable from the Windows host on Docker
+      # Desktop's linux engine; terminate at 127.0.0.1 where traefik is
+      # port-forwarded. Lowercase name is required: whw's Linux build reads
+      # "termination_map" (Linux env vars are case-sensitive).
+      termination_map: rendering,mockingbird:loopback
+
+volumes:
+  rendering-node-modules:

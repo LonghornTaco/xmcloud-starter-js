@@ -1,11 +1,11 @@
-Get-ChildItem -Path (Join-Path $PSScriptRoot "\data") -Directory | ForEach-Object {
-    $dataPath = $_.FullName
+# Clean writable per-run state for the local Mockingbird stack.
+# Removes Mockingbird's persistent index cache so the next boot does a
+# fresh parse of the SCS tree. Safe to run while the stack is down.
 
-    Get-ChildItem -Path $dataPath -Exclude ".gitkeep" -Recurse | Remove-Item -Force -Recurse -Verbose
-}
+$ErrorActionPreference = "Stop"
 
-Get-ChildItem -Path (Join-Path $PSScriptRoot "\deploy") -Directory | ForEach-Object {
-    $deployPath = $_.FullName
-
-    Get-ChildItem -Path $deployPath -Exclude ".gitkeep" -Recurse | Remove-Item -Force -Recurse -Verbose
+$cachePath = Join-Path $PSScriptRoot "..\mockingbird-cache"
+if (Test-Path $cachePath) {
+    Get-ChildItem -Path $cachePath -Exclude ".gitignore" -Recurse |
+        Remove-Item -Force -Recurse -Verbose
 }

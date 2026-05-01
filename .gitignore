@@ -49,3 +49,6 @@ packages/
 
 # VS Code settings
 .vscode/
+
+# Claude Code local settings
+.claude/

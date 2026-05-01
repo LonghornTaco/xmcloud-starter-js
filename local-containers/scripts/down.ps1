@@ -1,14 +1,16 @@
-# Set the root of the repository
+$ErrorActionPreference = "Stop"
+
+# Set the root of the repository.
 $RepoRoot = Resolve-Path "$PSScriptRoot\..\.."
 
-Write-Host "Down containers..." -ForegroundColor Green
+Write-Host "Stopping containers..." -ForegroundColor Green
+Push-Location (Join-Path $RepoRoot "local-containers")
 try {
-  Push-Location $RepoRoot\local-containers
-  docker-compose down
-  Pop-Location
-  if ($LASTEXITCODE -ne 0) {
-    Write-Error "Container down failed, see errors above."
-  }
+    docker compose down
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Container down failed, see errors above."
+    }
 }
 finally {
+    Pop-Location
 }

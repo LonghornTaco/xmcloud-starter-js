@@ -1,0 +1,3 @@
+# Mockingbird's index cache is regenerated on every boot. Do not commit.
+*
+!.gitignore
