@@ -91,9 +91,11 @@ services:
       - rendering-node-modules:/app/node_modules
     environment:
       # Server-side fetches hit mockingbird directly via docker DNS.
+      # Use the Experience-Edge-shaped path; it's the public-facing endpoint
+      # that Mockingbird supports as a stable contract.
       NEXT_PUBLIC_SITECORE_API_HOST: "http://mockingbird:${MOCKINGBIRD_PORT}"
       NEXT_PUBLIC_SITECORE_API_KEY: ${SITECORE_API_KEY}
-      GRAPH_QL_ENDPOINT: "http://mockingbird:${MOCKINGBIRD_PORT}/api/graphql"
+      GRAPH_QL_ENDPOINT: "http://mockingbird:${MOCKINGBIRD_PORT}/sitecore/api/graph/edge"
       # Clear Edge Context so the SDK uses the local API host above.
       SITECORE_EDGE_CONTEXT_ID: ""
       NEXT_PUBLIC_SITECORE_EDGE_CONTEXT_ID: ""

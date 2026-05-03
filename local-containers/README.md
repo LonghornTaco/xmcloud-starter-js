@@ -2,7 +2,7 @@
 
 A lightweight Linux container stack for local development of the XM Cloud Next.js starter kits. Spins up:
 
-- **Mockingbird** - a YAML-backed Sitecore CM shim that serves a GraphQL Layout Service from this repo's SCS-serialized YAML. Drop-in replacement for Experience Edge during local headless dev, with a Web UI for editing items, templates, and renderings.
+- **Mockingbird** - a YAML-backed Sitecore CM shim that serves a GraphQL Layout Service from this repo's SCS-serialized YAML. Drop-in replacement for Experience Edge during local headless dev. Includes a Web UI for editing items/templates/renderings, a built-in Sitecore PowerShell Extensions (SPE) ISE, and a GraphQL Editor.
 - **Rendering host** - a Next.js dev container that mounts one of the `examples/<starter>` directories.
 - **Traefik** - reverse proxy with TLS, exposes the rendering host and Mockingbird Web UI on friendly hostnames.
 - **windows-hosts-writer** - writes container hostnames to the Windows host's `hosts` file so devs can hit the friendly URLs from a browser.
@@ -81,8 +81,8 @@ docker compose up -d
 |---|---|
 | Rendering host | https://nextjs.xmc-starter-js.localhost |
 | Mockingbird Web UI | https://mockingbird.xmc-starter-js.localhost |
-| Mockingbird GraphQL | https://mockingbird.xmc-starter-js.localhost/api/graphql |
-| Mockingbird Edge alias | https://mockingbird.xmc-starter-js.localhost/sitecore/api/graph/edge |
+| Mockingbird SPE ISE | https://mockingbird.xmc-starter-js.localhost/scripts |
+| Mockingbird Layout Service | https://mockingbird.xmc-starter-js.localhost/sitecore/api/graph/edge |
 | Mockingbird indexing status | https://mockingbird.xmc-starter-js.localhost/api/status |
 | Traefik dashboard | http://localhost:8079 |
 
