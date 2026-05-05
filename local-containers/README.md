@@ -90,10 +90,9 @@ docker compose up -d
 
 | Mount | Host path (default) | Purpose |
 |---|---|---|
-| Mockingbird `/app/data/sitecore.json` | `../sitecore.json` | SCS root config |
-| Mockingbird `/app/data/serialization` | `../authoring/items` | Dev-authored templates, renderings, layouts |
-| Mockingbird `/app/data/content` | `./mockingbird-content` | Optional second SCS root for content-item YAMLs not in the repo |
-| Mockingbird `/app/data/cache` | `./mockingbird-cache` | Engine-internal index cache. Safe to delete; rebuilds on boot |
+| Mockingbird `/scs` | `../` | SCS project root (directory containing `sitecore.json`). Modules in `sitecore.json` resolve relative to this dir |
+| Mockingbird `/scs-content` | `./mockingbird-content` | Optional second SCS project root for content-item YAMLs not in the repo |
+| Mockingbird `/data/cache` | `./mockingbird-cache` | Engine-internal index cache. Safe to delete; rebuilds on boot |
 | Rendering `/app` | `../examples/<starter>` | The starter source |
 | Rendering `/app/node_modules` | named volume `rendering-node-modules` | Linux-native npm install, isolated from host |
 

@@ -44,23 +44,24 @@ services:
     environment:
       PORT: ${MOCKINGBIRD_PORT}
       HOST: 0.0.0.0
-      # CDN / Edge base URL prefix for media src attributes.
-      MEDIA_BASE_URL: ${MOCKINGBIRD_MEDIA_BASE_URL}
-      INDEX_CACHE_PATH: /app/data/cache/index.json.gz
-      # Per-request site routing: ?site=<name> > Host: header > null.
-      # No env pin needed: the SDK's multisite proxy passes ?site=, and
-      # mockingbird derives the site list from Site Grouping items in
-      # the corpus at boot via siteInfoCollection.
+      # Per-request site routing: ?site=<name> > Host: header > SITE_ROOT_PATH
+      # fallback. Mockingbird derives the site list from Site Grouping items
+      # at boot via siteInfoCollection; SITE_ROOT_PATH only fires when nothing
+      # in the corpus matches.
+      SITE_ROOT_PATH: ${SITE_ROOT_PATH}
+      # Container-side paths into the bind-mounted SCS project roots.
+      SCS_SITECORE_JSON: /scs/sitecore.json
+      SCS_CONTENT_SITECORE_JSON: /scs-content/sitecore.json
+      MOCKINGBIRD_CACHE_PATH: /data/cache
+      INDEX_CACHE_PATH: /data/cache/index.json.gz
     volumes:
-      # SCS root config - the same file `dotnet sitecore` reads.
-      - ${MOCKINGBIRD_SITECORE_JSON}:/app/data/sitecore.json
-      # Dev-authored templates, renderings, layouts, branch templates -
-      # committed to the repo.
-      - ${MOCKINGBIRD_SERIALIZATION_PATH}:/app/data/serialization
-      # Optional second SCS root for content-item YAMLs that aren't in the repo.
-      - ${MOCKINGBIRD_CONTENT_PATH}:/app/data/content
+      # Host SCS project root (the directory containing sitecore.json).
+      # Modules listed in sitecore.json resolve relative to this dir.
+      - ${SCS_ROOT}:/scs
+      # Optional second SCS project root for content-item YAMLs not in the repo.
+      - ${SCS_CONTENT_ROOT}:/scs-content
       # Engine-internal parsed-item index cache. Safe to delete; rebuilds on boot.
-      - ${MOCKINGBIRD_CACHE_PATH}:/app/data/cache
+      - ${MOCKINGBIRD_CACHE_PATH}:/data/cache
     networks:
       default:
         aliases:
